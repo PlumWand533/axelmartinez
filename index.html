@@ -1,9 +1,303 @@
+<style>
+    :root { --unam-azul: #002B7A; --unam-oro: #D59F0F; }
+    body { background-color: #f8f9fa; font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; display: flex; flex-direction: column; transition: padding-bottom 0.3s; }
+    
+    body.has-fixed-panel {
+        padding-bottom: 340px !important; 
+    }
+        #step-1-landing {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #002B7A 0%, #00153d 100%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            transition: transform 0.6s cubic-bezier(0.83, 0, 0.17, 1);
+        }
+
+
+    .header-hero { background: linear-gradient(135deg, var(--unam-azul) 0%, #001e54 100%); color: white; padding: 2.5rem 0 1.5rem; border-bottom: 5px solid var(--unam-oro); }
+    .badge-student { background-color: var(--unam-oro); color: var(--unam-azul); font-weight: 800; padding: 0.4em 0.8em; border-radius: 20px; font-size: 0.8rem; text-transform: uppercase; }
+    .nav-pills .nav-link.active { background-color: var(--unam-azul); color: var(--unam-oro); font-weight: bold; }
+    .nav-pills .nav-link { color: var(--unam-azul); }
+    
+    .materia-item { cursor: pointer; font-size: 0.9rem; border-left: 4px solid transparent; transition: all 0.2s; }
+    .materia-item:hover { background-color: #e9ecef; }
+    .materia-item.active-item { background-color: #e7f1ff; border-left-color: var(--unam-azul); color: var(--unam-azul); font-weight: bold; }
+    .materia-item.inscrita-item { background-color: #d1e7dd; border-left-color: #198754; }
+    .materia-item.candidata-item { background-color: #fff3cd; border-left-color: var(--unam-oro); }
+    
+    .aviso-requerido {
+        display: block;
+        font-size: 0.7rem;
+        color: #dc3545;
+        font-weight: 800;
+        margin-top: 2px;
+        text-transform: uppercase;
+        animation: fadeIn 0.5s;
+    }
+    .materia-item.item-requerido {
+        border-left-color: #dc3545 !important;
+        background-color: #fff5f5 !important;
+    }
+    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+    .area-header { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: #6c757d; background: #f8f9fa; padding: 8px 12px; margin-top: 5px; border-bottom: 1px solid #dee2e6; }
+    
+    .grupo-card { border: 1px solid #dee2e6; border-radius: 8px; background: white; transition: transform 0.2s; height: 100%; cursor: pointer; position: relative; }
+    .grupo-card:hover { transform: translateY(-5px); box-shadow: 0 6px 15px rgba(0,0,0,0.15); border-color: var(--unam-azul); z-index: 10; }
+    .grupo-card.choque { background-color: #fff5f5; border-color: #ffc9c9; }
+    .grupo-card.inscrita { border: 2px solid #198754; background-color: #f0fff4; }
+    .grupo-card.previsualizacion { border: 2px dashed #dc3545; background-color: #fff; box-shadow: 0 0 10px rgba(220, 53, 69, 0.2); }
+    .grupo-card.candidato-seleccionado { border: 2px solid var(--unam-oro); background-color: #fff9e6; }
+    
+    .horizontal-scroll-container {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: 15px;
+        padding-top: 15px; 
+        padding-bottom: 15px;
+        padding-left: 5px;
+        align-items: stretch;
+    }
+    .horizontal-scroll-container::-webkit-scrollbar { height: 14px; }
+    .horizontal-scroll-container::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 7px; margin: 0 5px; }
+    .horizontal-scroll-container::-webkit-scrollbar-thumb { background: #bbb; border-radius: 7px; border: 3px solid #f1f1f1; }
+    .horizontal-scroll-container::-webkit-scrollbar-thumb:hover { background: #999; }
+
+    .tabla-siae { font-size: 0.75rem; text-align: center; }
+    .tabla-siae thead th { background-color: #e9ecef; color: #495057; vertical-align: middle; }
+    .tabla-siae td { vertical-align: middle; padding: 4px; }
+    .col-dia { width: 8%; font-weight: 500; color: #002B7A; }
+    .btn-ver-obs { font-size: 0.7rem; padding: 1px 6px; margin-left: 5px; border-radius: 10px; border: 1px solid #17a2b8; color: #17a2b8; background: white; cursor: pointer; }
+    .obs-box { font-size: 0.8em; background: #e3f2fd; padding: 6px; border-radius: 4px; margin-top: 5px; display: none; border-left: 3px solid #2196f3; text-align: left; }
+    #toast-guardado { position: fixed; bottom: 20px; right: 20px; background-color: #198754; color: white; padding: 10px 20px; border-radius: 30px; display: none; z-index: 1000; }
+    .panel-filtros { background-color: #e3f2fd; border-bottom: 1px solid #bbdefb; }
+    .label-filtro { font-size: 0.75rem; font-weight: bold; color: #002B7A; margin-bottom: 2px; display: block; }
+    
+    .tabla-visual { 
+        font-size: 0.75rem; 
+        table-layout: fixed; 
+        border-collapse: separate; 
+        border-spacing: 0; 
+        background-color: white; 
+    }
+    .tabla-visual th { 
+        text-align: center; 
+        background: #f8f9fa; 
+        color: #6c757d; 
+        font-size: 0.8rem; 
+        border-bottom: 2px solid #dee2e6; 
+        padding: 4px; 
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 2px 2px rgba(0,0,0,0.05);
+    }
+    .tabla-visual td { 
+        height: 30px; 
+        border-right: 1px solid #eee; 
+        border-bottom: 1px solid #f1f1f1; 
+        padding: 0; 
+        vertical-align: top; 
+        position: relative; 
+    }
+    .hora-col { 
+        background: #fff; 
+        color: #999; 
+        font-weight: 600; 
+        font-size: 0.7rem; 
+        text-align: right; 
+        padding-right: 8px !important; 
+        vertical-align: middle !important; 
+        border-right: 2px solid #dee2e6 !important; 
+    }
+
+    .bloque-materia {
+        position: absolute; top: 0; left: 0; width: 100%; z-index: 50;
+        display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+        padding: 2px 4px; 
+        cursor: pointer;
+        border-radius: 4px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        border: 1px solid rgba(0,0,0,0.25); 
+        transition: all 0.15s ease-out;
+        overflow: hidden;
+    }
+    
+    .bloque-resaltado {
+        transform: scale(1.05) !important; 
+        z-index: 100 !important; 
+        box-shadow: 0 8px 16px rgba(0,0,0,0.2) !important;
+        border-color: var(--unam-azul) !important;
+    }
+
+    .bloque-traslape {
+        background-color: rgba(255, 255, 255, 0.75) !important; 
+        border: 2px dashed #dc3545 !important;
+        color: #dc3545 !important;
+        z-index: 70 !important;
+        backdrop-filter: blur(1px);
+    }
+    .label-traslape {
+        font-weight: 900;
+        color: #dc3545;
+        font-size: 0.7rem;
+        margin-top: 2px;
+        text-transform: uppercase;
+        background: rgba(255,255,255,0.9);
+        padding: 0 4px;
+        border-radius: 4px;
+    }
+
+    .materia-nombre { font-size: 0.7rem; font-weight: 800; color: #212529; line-height: 1; margin-bottom: 1px; }
+    .materia-grupo { font-size: 0.65rem; font-weight: 400; color: #000; margin-bottom: 1px; }
+    .materia-horas { font-size: 0.6rem; color: #555; font-weight: 600; white-space: pre-wrap; line-height: 1; }
+    .materia-profe { font-size: 0.6rem; color: #444; font-style: italic; line-height: 1; margin-top: 1px; }
+
+    .hide-prof .materia-profe { display: none !important; }
+    .hide-group .materia-grupo { display: none !important; }
+    .hide-time .materia-horas { display: none !important; }
+
+    .modal-profe-area { padding: 1.5rem; text-align: center; background: #f8f9fa; border-bottom: 1px solid #dee2e6; }
+    .modal-obs-area { padding: 1.5rem; text-align: center; font-size: 0.9rem; color: #555; }
+
+    .header-acciones { position: relative; z-index: 1050; overflow: visible !important; }
+
+    .panel-fijo-bottom {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 1040;
+        margin: 0 !important;
+        border-radius: 0;
+        border-top: 5px solid var(--unam-azul);
+        box-shadow: 0 -5px 20px rgba(0,0,0,0.15);
+        padding: 10px 20px;
+        background-color: #e3f2fd !important;
+    }
+    .panel-fijo-bottom .horizontal-scroll-container {
+        padding-bottom: 5px;
+    }
+    .slide-up-exit {
+        transform: translateY(-100%);
+        pointer-events: none;
+    }
+
+    #app-container-wrapper {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.8s ease 0.3s, transform 0.8s ease 0.3s;
+    }
+
+    .app-loaded {
+    opacity: 1 !important;
+    transform: none !important;
+    }
+
+    .header-hero { transition: all 0.5s ease; }
+    
+    body.mode-workspace .header-hero {
+        padding: 0.5rem 0 !important;
+        border-bottom-width: 2px;
+    }
+    body.mode-workspace .header-hero h1 { font-size: 1.2rem; margin: 0; }
+    body.mode-workspace .header-hero p { display: none; }
+    body.mode-workspace .header-hero .badge-student { display: none; }
+    body.mode-workspace .header-hero .d-inline-flex { 
+        transform: scale(0.9); margin-top: 0 !important; 
+    }
+    .card-hover-effect { transition: transform 0.2s, box-shadow 0.2s; }
+    .card-hover-effect:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important; }
+    /* Estilos para los pasos numéricos */
+    .step-badge {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        font-weight: 800;
+        font-size: 0.85rem;
+        margin-right: 10px;
+        flex-shrink: 0;
+        color: white;
+    }
+    .instruction-bar {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        border: 1px solid #eee;
+    }
+    .step-text { font-size: 0.85rem; color: #555; line-height: 1.3; }
+    .step-title { font-weight: 800; font-size: 0.75rem; text-transform: uppercase; display: block; margin-bottom: 2px;}
+    .btn-custom-manual {
+        background-color: #00695c !important; 
+        border-color: #00695c !important;
+        color: white !important; 
+        transition: all 0.3s;
+    }
+    .btn-custom-manual:hover {
+        background-color: #004d40 !important; 
+        border-color: #004d40 !important;
+        transform: scale(1.05);
+    }
+    .btn-custom-auto {
+        background-color: #6a1b9a !important; 
+        border-color: #6a1b9a !important;
+        color: white !important; 
+        transition: all 0.3s;
+    }
+    .btn-custom-auto:hover {
+        background-color: #4a148c !important; 
+        border-color: #4a148c !important;
+        transform: scale(1.05);
+    }
+    
+    /* --- BOTÓN VISUAL GRANDE --- */
+    /* Personalización para hacer el switch de "Visual" un botón negro grande */
+    .visual-mode-container {
+        display: flex;
+        align-items: center;
+        background-color: #212529; /* Negro */
+        color: white;
+        border-radius: 50px;
+        padding: 5px 15px;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        border: 2px solid transparent;
+    }
+    .visual-mode-container:hover {
+        transform: scale(1.05);
+        background-color: #000;
+        box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    }
+    .visual-mode-container input {
+        cursor: pointer;
+        margin-right: 8px !important;
+    }
+    .visual-mode-container label {
+        cursor: pointer;
+        font-weight: 800 !important;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        color: white !important;
+    }
+</style>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=1280">
     <title>Generador Horarios Facultad de Psicología UNAM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
@@ -12,178 +306,50 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 
-    <style>
-        :root { --unam-azul: #002B7A; --unam-oro: #D59F0F; }
-        body { background-color: #f8f9fa; font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; display: flex; flex-direction: column; transition: padding-bottom 0.3s; }
-        
-        body.has-fixed-panel {
-            padding-bottom: 340px !important; 
-        }
-
-        .header-hero { background: linear-gradient(135deg, var(--unam-azul) 0%, #001e54 100%); color: white; padding: 2.5rem 0 1.5rem; border-bottom: 5px solid var(--unam-oro); }
-        .badge-student { background-color: var(--unam-oro); color: var(--unam-azul); font-weight: 800; padding: 0.4em 0.8em; border-radius: 20px; font-size: 0.8rem; text-transform: uppercase; }
-        .nav-pills .nav-link.active { background-color: var(--unam-azul); color: var(--unam-oro); font-weight: bold; }
-        .nav-pills .nav-link { color: var(--unam-azul); }
-        .materia-item { cursor: pointer; font-size: 0.9rem; border-left: 4px solid transparent; transition: all 0.2s; }
-        .materia-item:hover { background-color: #e9ecef; }
-        .materia-item.active-item { background-color: #e7f1ff; border-left-color: var(--unam-azul); color: var(--unam-azul); font-weight: bold; }
-        .materia-item.inscrita-item { background-color: #d1e7dd; border-left-color: #198754; }
-        .materia-item.candidata-item { background-color: #fff3cd; border-left-color: var(--unam-oro); }
-        .area-header { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: #6c757d; background: #f8f9fa; padding: 8px 12px; margin-top: 5px; border-bottom: 1px solid #dee2e6; }
-        
-        .grupo-card { border: 1px solid #dee2e6; border-radius: 8px; background: white; transition: transform 0.2s; height: 100%; cursor: pointer; position: relative; }
-        .grupo-card:hover { transform: translateY(-5px); box-shadow: 0 6px 15px rgba(0,0,0,0.15); border-color: var(--unam-azul); z-index: 10; }
-        .grupo-card.choque { background-color: #fff5f5; border-color: #ffc9c9; }
-        .grupo-card.inscrita { border: 2px solid #198754; background-color: #f0fff4; }
-        .grupo-card.previsualizacion { border: 2px dashed #dc3545; background-color: #fff; box-shadow: 0 0 10px rgba(220, 53, 69, 0.2); }
-        .grupo-card.candidato-seleccionado { border: 2px solid var(--unam-oro); background-color: #fff9e6; }
-        
-        .horizontal-scroll-container {
-            display: flex;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            gap: 15px;
-            padding-top: 15px; 
-            padding-bottom: 15px;
-            padding-left: 5px;
-            align-items: stretch;
-        }
-        .horizontal-scroll-container::-webkit-scrollbar { height: 14px; }
-        .horizontal-scroll-container::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 7px; margin: 0 5px; }
-        .horizontal-scroll-container::-webkit-scrollbar-thumb { background: #bbb; border-radius: 7px; border: 3px solid #f1f1f1; }
-        .horizontal-scroll-container::-webkit-scrollbar-thumb:hover { background: #999; }
-
-        .tabla-siae { font-size: 0.75rem; text-align: center; }
-        .tabla-siae thead th { background-color: #e9ecef; color: #495057; vertical-align: middle; }
-        .tabla-siae td { vertical-align: middle; padding: 4px; }
-        .col-dia { width: 8%; font-weight: 500; color: #002B7A; }
-        .btn-ver-obs { font-size: 0.7rem; padding: 1px 6px; margin-left: 5px; border-radius: 10px; border: 1px solid #17a2b8; color: #17a2b8; background: white; cursor: pointer; }
-        .obs-box { font-size: 0.8em; background: #e3f2fd; padding: 6px; border-radius: 4px; margin-top: 5px; display: none; border-left: 3px solid #2196f3; text-align: left; }
-        #toast-guardado { position: fixed; bottom: 20px; right: 20px; background-color: #198754; color: white; padding: 10px 20px; border-radius: 30px; display: none; z-index: 1000; }
-        .panel-filtros { background-color: #e3f2fd; border-bottom: 1px solid #bbdefb; }
-        .label-filtro { font-size: 0.75rem; font-weight: bold; color: #002B7A; margin-bottom: 2px; display: block; }
-        
-        .tabla-visual { 
-            font-size: 0.75rem; 
-            table-layout: fixed; 
-            border-collapse: separate; 
-            border-spacing: 0; 
-            background-color: white; 
-        }
-        .tabla-visual th { 
-            text-align: center; 
-            background: #f8f9fa; 
-            color: #6c757d; 
-            font-size: 0.8rem; 
-            border-bottom: 2px solid #dee2e6; 
-            padding: 4px; 
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 2px rgba(0,0,0,0.05);
-        }
-        .tabla-visual td { 
-            height: 30px; 
-            border-right: 1px solid #eee; 
-            border-bottom: 1px solid #f1f1f1; 
-            padding: 0; 
-            vertical-align: top; 
-            position: relative; 
-        }
-        .hora-col { 
-            background: #fff; 
-            color: #999; 
-            font-weight: 600; 
-            font-size: 0.7rem; 
-            text-align: right; 
-            padding-right: 8px !important; 
-            vertical-align: middle !important; 
-            border-right: 2px solid #dee2e6 !important; 
-        }
-
-        .bloque-materia {
-            position: absolute; top: 0; left: 0; width: 100%; z-index: 50;
-            display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
-            padding: 2px 4px; 
-            cursor: pointer;
-            border-radius: 4px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            border: 1px solid rgba(0,0,0,0.25); 
-            transition: all 0.15s ease-out; /* Animación más suave */
-            overflow: hidden;
-        }
-        
-        /* Efecto hover global para todos los bloques de la misma materia */
-        .bloque-resaltado {
-            transform: scale(1.05) !important; 
-            z-index: 100 !important; 
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2) !important;
-            border-color: var(--unam-azul) !important;
-        }
-
-        /* ESTILO PARA EL BLOQUE DE TRASLAPE/PREVISUALIZACIÓN */
-        .bloque-traslape {
-            /* Color blanco translúcido */
-            background-color: rgba(255, 255, 255, 0.75) !important; 
-            border: 2px dashed #dc3545 !important;
-            color: #dc3545 !important;
-            z-index: 70 !important;
-            backdrop-filter: blur(1px); /* Efecto vidrio opcional */
-        }
-        .label-traslape {
-            font-weight: 900;
-            color: #dc3545;
-            font-size: 0.7rem;
-            margin-top: 2px;
-            text-transform: uppercase;
-            background: rgba(255,255,255,0.9);
-            padding: 0 4px;
-            border-radius: 4px;
-        }
-
-        .materia-nombre { font-size: 0.7rem; font-weight: 800; color: #212529; line-height: 1; margin-bottom: 1px; }
-        .materia-grupo { font-size: 0.65rem; font-weight: 400; color: #000; margin-bottom: 1px; }
-        .materia-horas { font-size: 0.6rem; color: #555; font-weight: 600; white-space: pre-wrap; line-height: 1; }
-        .materia-profe { font-size: 0.6rem; color: #444; font-style: italic; line-height: 1; margin-top: 1px; }
-
-        /* CLASES PARA OCULTAR ELEMENTOS VISUALES */
-        .hide-prof .materia-profe { display: none !important; }
-        .hide-group .materia-grupo { display: none !important; }
-        .hide-time .materia-horas { display: none !important; }
-
-        .modal-profe-area { padding: 1.5rem; text-align: center; background: #f8f9fa; border-bottom: 1px solid #dee2e6; }
-        .modal-obs-area { padding: 1.5rem; text-align: center; font-size: 0.9rem; color: #555; }
-
-        .header-acciones { position: relative; z-index: 1050; overflow: visible !important; }
-
-        .panel-fijo-bottom {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 1040;
-            margin: 0 !important;
-            border-radius: 0;
-            border-top: 5px solid var(--unam-azul);
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.15);
-            padding: 10px 20px;
-            background-color: #e3f2fd !important;
-        }
-        .panel-fijo-bottom .horizontal-scroll-container {
-            padding-bottom: 5px;
-        }
-    </style>
-</head>
+    </head>
 <body>
+    
+    <div id="step-1-landing">
+        <div class="container px-4">
+            <div class="mb-4"><i class="bi bi-mortarboard-fill display-1 text-warning"></i></div>
+            <h1 class="display-4 fw-bold mb-2">¡BIENVENIDX!</h1>
+            <p class="lead mb-5 text-light opacity-75" style="max-width: 600px; margin: 0 auto;">
+                Generador de horarios de <strong>Apoyo a las Inscripciones</strong> de la Facultad de Psicología UNAM
+            </p>
+            <div class="disclaimer-glass mb-4">(Este es un Proyecto Estudiantil Independiente)</div>
+
+            <div class="card border-0 shadow-lg p-4 rounded-4 text-dark mx-auto" style="max-width: 450px;">
+                <label class="fw-bold text-primary mb-2 small text-uppercase">Para comenzar:</label>
+                <h4 class="fw-bold mb-3">¿Qué semestre cursarás?</h4>
+                
+                <select id="landing-selector" class="form-select form-select-lg fw-bold border-2 border-primary text-center mb-3" style="background-color:#f8f9fa;" onchange="document.getElementById('btn-start-app').disabled = false">
+                    <option value="" selected disabled>- Selecciona -</option>
+                    <option value="2">2do Semestre</option>
+                    <option value="4">4to Semestre</option>
+                    <option value="6">6to Semestre</option>
+                    <option value="8">8vo Semestre</option>
+                    <option value="adicional">Semestre Adicional / Optativas</option>
+                </select>
+                
+                <button id="btn-start-app" class="btn btn-primary btn-lg w-100 fw-bold shadow-sm" onclick="window.entrarAlWorkspace()" disabled>
+                    CREAR MI HORARIO <i class="bi bi-arrow-right-short"></i>
+                </button>
+            </div>
+            <p class="small mt-4 opacity-50"><i class="bi bi-exclamation-triangle"></i> Importante: <br>
+                <strong>NO afiliado</strong> a la administración de la Facultad.
+            La inscripción oficial se realiza en las páginas oficiales dadas por la Facultad.</p>
+        </div>
+    </div>
+
+<div id="app-container-wrapper">
 
 <header class="header-hero text-center mb-4">
     <div class="container">
-        <span class="badge-student mb-2 d-inline-block"><i class="bi bi-mortarboard-fill"></i> Iniciativa Estudiantil</span>
-        <h1 class="display-5 fw-bold mb-1">Generador de Horarios Facultad de Psicología UNAM</h1>
-        <p class="fs-5 mb-3 text-light opacity-75">Semestre 2026-2</p>
+        <span class="badge-student mb-2 d-inline-block"><i class="bi bi-mortarboard-fill"></i> PROYECTO AIE</span>
+        <br><strong>Semestre 2026-2</strong>
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                <p class="lead" style="font-size: 1.1rem;">
+                <p class="lead" style="font-size: 1.1rem;"> 
                     Organiza tu semestre de forma sencilla y eficiente.
                 </p>
             </div>
@@ -203,153 +369,148 @@
 
 <div class="container-fluid px-4 pb-5" id="app">
     <div id="alerta-semestre" class="container mb-3"></div>
-
+    
     <div class="container mb-4">
-    <div class="accordion shadow-sm" id="accordionGuia">
-        <div class="accordion-item border-0">
-            <h2 class="accordion-header">
-                <button class="accordion-button collapsed fw-bold text-secondary bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#collapseGuia">
-                    <i class="bi bi-lightbulb me-2 text-warning"></i> ¿Cómo usar esta herramienta? (Guía rápida)
-                </button>
-            </h2>
-            <div id="collapseGuia" class="accordion-collapse collapse" data-bs-parent="#accordionGuia">
-                <div class="accordion-body bg-light">
-                    <div class="row g-4">
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card h-100 border-0 shadow-sm card-hover-effect" 
+                     style="border-top: 5px solid #00695c !important; cursor: pointer;"
+                     onclick="activarModo('manual')">
+                    <div class="card-body p-4 text-center d-flex flex-column align-items-center justify-content-center">
+                        <div class="mb-3 rounded-circle p-3" style="background-color: #e0f2f1; color: #00695c;">
+                            <i class="bi bi-pencil-square display-5"></i>
+                        </div>
+                        <h4 class="fw-bold text-dark mb-1">Arma tu horario paso a paso</h4>
+                        <p class="text-muted fst-italic mb-4">Quiero elegir grupo por grupo</p>
                         
-                        <div class="col-12 border-bottom pb-3">
-                            <h5 class="fw-bold text-primary mb-2"><i class="bi bi-stars"></i> Organiza tu semestre de forma sencilla y eficiente.</h5>
-                            <p class="text-muted mb-2 small">
-                                Este generador te permite simular tu carga académica, visualizar choques y comparar tus horarios <strong>antes</strong> de la inscripción real.
-                            </p>
-                            <div class="d-flex gap-2 flex-wrap">
-                                <span class="badge bg-white text-secondary border"><i class="bi bi-eye"></i> Visualiza Traslapes</span>
-                                <span class="badge bg-white text-secondary border"><i class="bi bi-ui-checks"></i> Combina materias de distintos semestres</span>
-                                <span class="badge bg-white text-secondary border"><i class="bi bi-arrow-counterclockwise"></i> Rehacer y deshacer cambios</span>
-                                <span class="badge bg-white text-secondary border"><i class="bi bi-palette"></i> Personaliza Colores</span>
-                                <span class="badge bg-white text-secondary border"><i class="bi bi-floppy"></i> Guarda y exporta</span>
-                            </div>
+                        <button class="btn btn-custom-manual rounded-pill px-4 fw-bold mt-auto">
+                            Usar modo manual <i class="bi bi-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card h-100 border-0 shadow-sm card-hover-effect" 
+                     style="border-top: 5px solid #6a1b9a !important; cursor: pointer;"
+                     onclick="activarModo('auto')">
+                    <div class="card-body p-4 text-center d-flex flex-column align-items-center justify-content-center">
+                        <div class="mb-3 rounded-circle p-3" style="background-color: #f3e5f5; color: #6a1b9a;">
+                            <i class="bi bi-cpu-fill display-5"></i>
                         </div>
-
-                        <div class="col-md-6 border-end"> 
-                            <div class="d-flex h-100">
-                                <div class="me-3"><span class="badge bg-primary rounded-circle p-2"><i class="bi bi-pencil-square fs-4 text-white"></i></span></div>
-                                <div>
-                                    <h5 class="fw-bold text-primary mb-2">Opción 1: Generador Manual</h5>
-                                    <p class="small text-muted mb-2">Construye, modifica y guarda horarios manualmente.</p>
-                                    
-                                    <h6 class="fw-bold small text-uppercase text-dark mt-3"><i class="bi bi-check-all"></i> Flujo de trabajo:</h6>
-                                    <ol class="small ps-3 mb-3">
-                                        <li>Busca tu materia a la izquierda y selecciónala.</li>
-                                        <li>En el panel inferior, haz clic en el grupo que desees.</li>
-                                        <li>En el recuadro de tu horario, alterna entre el modo de vista normal y modo visual <i class="bi bi-toggle-on"></i></li>
-                                        <li>Ponle un nombre a tu horario y guardalo <i class="bi bi-floppy"></i> o descargalo <i class="bi bi-file-earmark-arrow-down"></i></li>
-
-                                        <li><strong>Tip:</strong> Usa el botón <i class="bi bi-pin-angle"></i> <strong>"Fijar Panel"</strong> para mantener las opciones visibles mientras bajas.</li>
-                                    </ol>
-
-                                    <div class="bg-white p-2 rounded border mb-2">
-                                        <h6 class="fw-bold small text-danger mb-1"><i class="bi bi-exclamation-triangle"></i> Manejo de Traslapes</h6>
-                                        <p class="small mb-0 text-muted" style="font-size: 0.8rem;">
-                                            Puedes seleccionar materias que se traslapan. Aparecerán en el horario con <strong>borde punteado rojo</strong>. Puedes confirmar si deseas reemplazar las materias que chocan con la opción o cancelar.
-                                        </p>
-                                    </div>
-
-                                    <div class="d-flex align-items-center gap-2 mt-2">
-                                        <i class="bi bi-gear-fill text-secondary fs-5"></i>
-                                        <span class="small text-muted lh-1">Usa el engrane junto al switch "Visual" para ocultar profesor, grupo u horas en la tabla gráfica.</span>
-                                    </div>
-                                    <div class="d-flex align-items-center gap-2 mt-2">
-                                        <i class="bi bi-arrow-counterclockwise text-secondary fs-5"></i>
-                                        <span class="small text-muted lh-1">¿Te equivocaste? Usa las flechas para <strong>Deshacer</strong> o Rehacer cambios.</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="d-flex h-100">
-                                <div class="me-3"><span class="badge bg-success rounded-circle p-2"><i class="bi bi-cpu fs-4 text-white"></i></span></div>
-                                <div>
-                                    <h5 class="fw-bold text-success mb-2">Opción 2: Explorador Automático</h5>
-                                    <p class="small text-muted mb-2">Deja que el sistema calcule combinaciones sin choques por ti.</p>
-                                    
-                                    <h6 class="fw-bold small text-uppercase text-dark mt-3"><i class="bi bi-check-all"></i> Pasos:</h6>
-                                    <ol class="small ps-3 mb-2">
-                                        <li>Selecciona <strong>todos los profesores</strong> que te interesen de cada materia.</li>
-                                        <li>Presiona <strong class="text-dark bg-warning px-1 rounded" style="font-size: 0.9em;">GENERAR HORARIOS</strong>.</li>
-                                        <li>El sistema te mostrará <strong>todas las combinaciones posibles</strong> en base a tus intereses.</li>
-                                        <li>Usa los filtros (Turno, Días libres, profesores) para refinar tu búsqueda.</li>
-                                    </ol>
-
-                                    <div class="bg-white p-2 rounded border mt-2">
-                                        <h6 class="fw-bold small text-primary mb-1"><i class="bi bi-magic"></i> Funciones Pro</h6>
-                                        <ul class="small ps-3 mb-0 text-muted" style="font-size: 0.8rem;">
-                                            <li><strong>Recolorear:</strong> Si no te gustan los colores asignados, presiona <i class="bi bi-palette"></i> para cambiarlos todos.</li>
-                                            <li><strong>Transferir:</strong> Si encuentras un horario base que te gusta, envíalo al "Generador Manual" para editar detalles finos.</li>
-                                            <li><strong>Visual:</strong> Activa el switch en cada resultado para verlo gráficamente.</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
+                        <h4 class="fw-bold text-dark mb-1">Déjame ver todas las combinaciones</h4>
+                        <p class="text-muted fst-italic mb-4">Quiero comparar opciones sin traslapes</p>
+                        
+                        <button class="btn btn-custom-auto rounded-pill px-4 fw-bold mt-auto">
+                            Explorar horarios <i class="bi bi-search"></i>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    </div>
-
-    <div class="container mb-4">
-        <ul class="nav nav-pills nav-justified bg-white rounded shadow-sm p-1" id="pills-tab">
-            <li class="nav-item"><button class="nav-link active" id="tab-manual" onclick="cambiarModo('manual')">Generador Manual</button></li>
-            <li class="nav-item"><button class="nav-link" id="tab-auto" onclick="cambiarModo('auto')">Explorador Automático</button></li>
-        </ul>
-    </div>
-
-    <div id="vista-manual" class="flex-column gap-3" style="display:flex;">
-        <div class="row g-3">
-            <div class="col-lg-3 col-md-4">
-                <div class="card shadow-sm h-100" style="height: 880px; max-height: 880px;">
-                    <div class="card-header bg-white py-3">
-                        <h6 class="fw-bold mb-2 text-primary"><i class="bi bi-search"></i> 1. Elige Materia</h6>
-                        <input type="text" id="buscador" class="form-control form-control-sm" placeholder="Buscar materia..." onkeyup="filtrarMaterias()">
-                    </div>
-                    <div class="card-body p-0 overflow-auto" id="lista-materias-container"><div id="lista-materias" class="list-group list-group-flush"></div></div>
+    <div id="vista-manual" class="flex-column h-100" style="display:none;">
+        <div class="instruction-bar p-3 mx-3 mb-3" style="background-color: #e0f2f1; border: 1px solid #b2dfdb; border-left: 5px solid #00695c;">
+        <h6 class="fw-bold mb-3 border-bottom pb-2" style="font-size: 0.85rem; letter-spacing: 0.5px; color: #004d40; border-color: #b2dfdb !important;">
+            <i class="bi bi-ui-checks-grid me-2"></i> MODO MANUAL. PASOS A SEGUIR:
+        </h6>
+        <div class="row align-items-center g-3">
+            <div class="col-md-4 d-flex align-items-start border-end-md" style="border-color: #b2dfdb;">
+                <div class="step-badge shadow-sm" style="background-color: #00695c;">1</div>
+                <div class="step-text">
+                    <span class="step-title" style="color: #00695c;">AGREGAR</span>
+                    Busca tu materia a la izquierda y selecciónala.
                 </div>
             </div>
-            
-            <div class="col-lg-9 col-md-8">
-                <div class="card shadow-sm border-0 h-100" style="min-height: 350px;">
-                    <div class="card-header header-acciones bg-white d-flex justify-content-between align-items-center py-2 flex-wrap gap-2">
-                        <div class="d-flex align-items-center gap-2 flex-wrap">
-                            <div class="input-group input-group-sm" style="width: auto;">
-                                <select id="selector-horarios" class="form-select border-primary fw-bold text-primary" style="max-width: 130px;" onchange="cambiarHorarioActivo()"></select>
-                                <button class="btn btn-outline-primary" onclick="crearNuevoHorario()" title="Crear nuevo horario"><i class="bi bi-plus-lg"></i></button>
+            <div class="col-md-4 d-flex align-items-start border-end-md" style="border-color: #b2dfdb;">
+                <div class="step-badge shadow-sm" style="background-color: #00695c;">2</div>
+                <div class="step-text">
+                    <span class="step-title" style="color: #00695c;">SELECCIONAR</span>
+                    En el panel derecho selecciona al profesor y presiona continuar.
+                </div>
+            </div>
+            <div class="col-md-4 d-flex align-items-start">
+                <div class="step-badge shadow-sm" style="background-color: #00695c;">3</div>
+                <div class="step-text">
+                    <span class="step-title" style="color: #00695c;">VISUALIZA</span>
+                    Repite con la siguiente materia y observa tu horario.
+                </div>
+            </div>
+        </div>
+    </div>
+            <div class="row g-3 h-100">
+                
+                <div class="col-lg-3 col-md-4 d-flex flex-column">
+                    <div class="card shadow-sm flex-grow-1" style="max-height: 85vh;">
+                        <div class="card-header bg-white py-3">
+                            <h6 class="fw-bold mb-2" style="color: #00695c;"><i class="bi bi-search"></i> 1. Elige Materia</h6>
+                            <input type="text" id="buscador" class="form-control form-control-sm" placeholder="Buscar materia..." onkeyup="filtrarMaterias()">
+                        </div>
+                        <div class="card-body p-0 overflow-auto" id="lista-materias-container">
+                            <div id="lista-materias" class="list-group list-group-flush"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-9 col-md-8 d-flex flex-column">
+                    
+                    <div id="contenedor-panel-manual" class="card shadow-sm border-0 mb-3 bg-light" style="flex-shrink: 0;">
+                        <div class="card-header bg-white d-flex justify-content-between align-items-center py-2">
+                            <div class="d-flex align-items-center">
+                                <h6 class="fw-bold mb-0 me-3" id="titulo-seleccion" style="color: #00695c;"><i class="bi bi-arrow-left-circle"></i> 2. Selecciona un Profesor</h6>
+                                <span class="badge bg-light text-dark border" id="info-seleccion">Esperando...</span>
                             </div>
-
-                            <div class="input-group input-group-sm" style="width: 200px;">
-                                <input type="text" id="nombre-horario-actual" class="form-control fw-bold text-success border-success" value="Mi Horario" placeholder="Nombre...">
-                                <button class="btn btn-success" onclick="guardarNombreHorario()" title="Guardar nombre"><i class="bi bi-floppy"></i></button>
-                            </div>
-
-                            <button class="btn btn-sm btn-outline-danger" onclick="eliminarHorarioActual()" title="Eliminar este horario"><i class="bi bi-trash"></i></button>
-
-                            <div class="btn-group btn-group-sm ms-2">
-                                <button class="btn btn-outline-secondary" id="btn-undo" onclick="undo()" disabled title="Deshacer (Undo)">
-                                    <i class="bi bi-arrow-counterclockwise"></i>
-                                </button>
-                                <button class="btn btn-outline-secondary" id="btn-redo" onclick="redo()" disabled title="Rehacer (Redo)">
-                                    <i class="bi bi-arrow-clockwise"></i>
-                                </button>
-                            </div>
-
-                            <div class="d-flex align-items-center bg-light rounded px-2 border ms-2">
-                                <div class="form-check form-switch d-flex align-items-center m-0">
-                                    <input class="form-check-input" type="checkbox" id="switch-vista" onchange="toggleVistaVisual()">
-                                    <label class="form-check-label fw-bold text-muted small ms-1" for="switch-vista">Visual</label>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="toggleFijarPanel()" id="btn-fijar-panel" title="Fijar panel abajo">
+                                <i class="bi bi-pin-angle"></i> Fijar Abajo
+                            </button>
+                        </div>
+                        <div class="card-body bg-light py-2" id="body-panel-manual">
+                            <div id="contenedor-grupos" class="horizontal-scroll-container">
+                                <div class="text-center text-muted py-4 w-100">
+                                    <i class="bi bi-hand-index-thumb display-6 opacity-25"></i>
+                                    <p class="mt-2 small mb-0">Selecciona una materia del menú izquierdo.</p>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm border-0 flex-grow-1" style="min-height: 400px;">
+                        <div class="card-header header-acciones bg-white d-flex justify-content-between align-items-center py-2 flex-wrap gap-2">
+                            <div class="d-flex align-items-center gap-2 flex-wrap">
+                                <div class="input-group input-group-sm" style="width: auto;">
+                                    <select id="selector-horarios" class="form-select fw-bold" 
+                                            style="max-width: 130px; color: #00695c; border-color: #00695c;" 
+                                            onchange="cambiarHorarioActivo()"></select>
+    
+                                    <button class="btn btn-outline-secondary" 
+                                            style="color: #00695c; border-color: #00695c;" 
+                                            onclick="crearNuevoHorario()" title="Crear nuevo horario">
+                                            <i class="bi bi-plus-lg"></i>
+                                    </button>
+                                </div>
+                                <div class="input-group input-group-sm" style="width: 200px;">
+                                    <input type="text" id="nombre-horario-actual" class="form-control fw-bold text-success border-success" value="Mi Horario" placeholder="Nombre...">
+                                    <button class="btn btn-success" onclick="guardarNombreHorario()" title="Guardar nombre"><i class="bi bi-floppy"></i></button>
+                                </div>
+                                <button class="btn btn-sm btn-outline-danger" onclick="eliminarHorarioActual()" title="Eliminar este horario"><i class="bi bi-trash"></i></button>
+                                
+                                <div class="btn-group btn-group-sm ms-2">
+                                    <button class="btn btn-outline-secondary" id="btn-undo" onclick="undo()" disabled title="Deshacer (Undo)">
+                                        <i class="bi bi-arrow-counterclockwise"></i>
+                                    </button>
+                                    <button class="btn btn-outline-secondary" id="btn-redo" onclick="redo()" disabled title="Rehacer (Redo)">
+                                        <i class="bi bi-arrow-clockwise"></i>
+                                    </button>
+                                </div>
+
+                                <div class="visual-mode-container ms-3">
+                                    <div class="form-check form-switch d-flex align-items-center m-0">
+                                        <input class="form-check-input" type="checkbox" id="switch-vista" onchange="toggleVistaVisual()">
+                                        <label class="form-check-label ms-2" for="switch-vista">MODO VISUAL</label>
+                                    </div>
+                                </div>
+
                                 <div class="dropdown ms-1">
                                     <button class="btn btn-sm btn-link text-secondary p-0 border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="bi bi-gear-fill"></i>
@@ -361,175 +522,195 @@
                                         <li><div class="form-check small"><input class="form-check-input vis-toggle" type="checkbox" id="chk-horas" checked onchange="actualizarConfigVisual()"><label class="form-check-label" for="chk-horas">Horario</label></div></li>
                                     </ul>
                                 </div>
-                            </div>
-                            
-                            <button id="btn-recolorear" class="btn btn-sm btn-outline-primary ms-1" style="display:none;" onclick="recolorearInteligente()" title="Reasignar colores (Manual)">
-                                <i class="bi bi-palette"></i>
-                            </button>
-                        </div>
-                        
-                        <div class="d-flex align-items-center mt-1 mt-md-0">
-                            <select id="sort-manual" class="form-select form-select-sm border-primary me-2" style="width: auto; font-size: 0.75rem; font-weight: bold;" onchange="ordenarMiHorario()">
-                                <option value="materia" selected>Materia</option>
-                                <option value="profesor">Profesor (A-Z)</option>
-                                <option value="grupo">Grupo</option>
-                                <option value="horas">Duración Total</option>
-                                <option value="cronologico">Orden Cronológico</option>
-                            </select>
-                            
-                            <span id="creditos-badge" class="badge bg-secondary me-3">0 Créditos</span>
-                            
-                            <div class="btn-group me-2">
-                                <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-download"></i> Descargar
+                                <button id="btn-recolorear" class="btn btn-sm btn-outline-primary ms-1" style="display:none;" onclick="recolorearInteligente()" title="Reasignar colores (Manual)">
+                                    <i class="bi bi-palette"></i>
                                 </button>
-                                <ul class="dropdown-menu dropdown-menu-end shadow">
-                                    <li><button class="dropdown-item small" onclick="descargarPDF()"><i class="bi bi-file-earmark-pdf text-danger"></i> PDF</button></li>
-                                    <li><button class="dropdown-item small" onclick="descargarImagen()"><i class="bi bi-file-image text-primary"></i> Imagen (PNG)</button></li>
-                                    <li><button class="dropdown-item small" onclick="descargarExcel()"><i class="bi bi-file-earmark-excel text-success"></i> Excel (.xlsx Visual)</button></li>
-                                    <li><button class="dropdown-item small" onclick="descargarCSV()"><i class="bi bi-file-text"></i> CSV (Datos)</button></li>
-                                </ul>
                             </div>
+                            
+                            <div class="d-flex align-items-center mt-1 mt-md-0">
+                                <select id="sort-manual" class="form-select form-select-sm border-primary me-2" style="width: auto; font-size: 0.75rem; font-weight: bold;" onchange="ordenarMiHorario()">
+                                    <option value="materia" selected>Materia</option>
+                                    <option value="profesor">Profesor (A-Z)</option>
+                                    <option value="grupo">Grupo</option>
+                                    <option value="horas">Duración Total</option>
+                                    <option value="cronologico">Orden Cronológico</option>
+                                </select>
+                                
+                                <span id="creditos-badge" class="badge bg-secondary me-3">0 Créditos</span>
+                                
+                                <div class="btn-group me-2">
+                                    <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-download"></i> Descargar
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow">
+                                        <li><button class="dropdown-item small" onclick="descargarPDF()"><i class="bi bi-file-earmark-pdf text-danger"></i> PDF</button></li>
+                                        <li><button class="dropdown-item small" onclick="descargarImagen()"><i class="bi bi-file-image text-primary"></i> Imagen (PNG)</button></li>
+                                        <li><button class="dropdown-item small" onclick="descargarExcel()"><i class="bi bi-file-earmark-excel text-success"></i> Excel (.xlsx Visual)</button></li>
+                                        <li><button class="dropdown-item small" onclick="descargarCSV()"><i class="bi bi-file-text"></i> CSV (Datos)</button></li>
+                                    </ul>
+                                </div>
 
-                            <button class="btn btn-sm btn-outline-danger" id="btn-limpiar-manual" onclick="limpiarTodoManual()" style="display:none;">Limpiar</button>
+                                <button class="btn btn-sm btn-outline-danger" id="btn-limpiar-manual" onclick="limpiarTodoManual()" style="display:none;">Limpiar</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="card-body p-0">
-                        <div id="vista-lista-container" class="table-responsive bg-white p-2" style="max-height: 800px;">
-                            <table class="table table-bordered table-hover mb-0 tabla-siae">
-                                <thead class="sticky-top">
-                                    <tr><th>Materia</th><th>Gpo</th><th>Profesor</th><th class="col-dia">Lun</th><th class="col-dia">Mar</th><th class="col-dia">Mie</th><th class="col-dia">Jue</th><th class="col-dia">V</th><th class="col-dia">S</th><th>Cr</th><th>Obs</th><th></th></tr>
-                                </thead>
-                                <tbody id="tabla-mi-horario"><tr><td colspan="12" class="text-center text-muted py-4">No has agregado materias aún.</td></tr></tbody>
-                            </table>
-                        </div>
-                        <div id="vista-visual-container" class="table-responsive bg-white p-3" style="display:none; overflow: visible;">
-                            <table class="table mb-0 tabla-visual w-100">
-                                <thead>
-                                    <tr>
-                                        <th style="width:50px;">Hora</th>
-                                        <th>Lunes</th><th>Martes</th><th>Miércoles</th><th>Jueves</th><th>Viernes</th><th>Sábado</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="grid-horario-visual"></tbody>
-                            </table>
+                        <div class="card-body p-0 d-flex flex-column" style="overflow: hidden;">
+                            <div id="vista-lista-container" class="table-responsive bg-white p-2 flex-grow-1" style="overflow-y: auto;">
+                                <table class="table table-bordered table-hover mb-0 tabla-siae">
+                                    <thead class="sticky-top">
+                                        <tr><th>Materia</th><th>Gpo</th><th>Profesor</th><th class="col-dia">Lun</th><th class="col-dia">Mar</th><th class="col-dia">Mie</th><th class="col-dia">Jue</th><th class="col-dia">V</th><th class="col-dia">S</th><th>Cr</th><th>Obs</th><th></th></tr>
+                                    </thead>
+                                    <tbody id="tabla-mi-horario"><tr><td colspan="12" class="text-center text-muted py-4">No has agregado materias aún.</td></tr></tbody>
+                                </table>
+                            </div>
+                            <div id="vista-visual-container" class="table-responsive bg-white p-3 flex-grow-1" style="display:none; overflow-y: auto;">
+                                <table class="table mb-0 tabla-visual w-100">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:50px;">Hora</th>
+                                            <th>Lunes</th><th>Martes</th><th>Miércoles</th><th>Jueves</th><th>Viernes</th><th>Sábado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="grid-horario-visual"></tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="contenedor-panel-manual" class="card shadow-sm border-0 mt-3 bg-light">
-            <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                <div class="d-flex align-items-center">
-                    <h6 class="fw-bold mb-0 text-primary me-3" id="titulo-seleccion"><i class="bi bi-arrow-left-circle"></i> Selecciona una materia</h6>
-                    <span class="badge bg-light text-dark border" id="info-seleccion">Esperando...</span>
+    <div id="vista-auto" class="container-fluid p-0 h-100" style="display:none;">
+        <div class="instruction-bar p-3 mx-3 mb-3" style="background-color: #f3e5f5; border: 1px solid #e1bee7; border-left: 5px solid #6a1b9a;">
+        <h6 class="fw-bold mb-3 border-bottom pb-2" style="font-size: 0.85rem; letter-spacing: 0.5px; color: #4a148c; border-color: #e1bee7 !important;">
+            <i class="bi bi-cpu-fill me-2"></i> MODO EXPLORAR. PASOS A SEGUIR:
+        </h6>
+        <div class="row align-items-center g-3">
+            <div class="col-md-4 d-flex align-items-start border-end-md" style="border-color: #e1bee7;">
+                <div class="step-badge shadow-sm" style="background-color: #6a1b9a;">1</div>
+                <div class="step-text">
+                    <span class="step-title" style="color: #6a1b9a;">AGREGAR</span>
+                    Busca tu materia a la izquierda y selecciónala.
                 </div>
-                <button class="btn btn-sm btn-outline-secondary" onclick="toggleFijarPanel()" id="btn-fijar-panel" title="Fijar panel en la parte inferior">
-                    <i class="bi bi-pin-angle"></i> Fijar Panel
-                </button>
             </div>
-            <div class="card-body bg-light" id="body-panel-manual">
-                <div id="contenedor-grupos" class="horizontal-scroll-container">
-                    <div class="text-center text-muted py-5 w-100"><i class="bi bi-hand-index-thumb display-1 opacity-25"></i><p class="mt-3 lead">Selecciona una materia del menú izquierdo.</p></div>
+            <div class="col-md-4 d-flex align-items-start border-end-md" style="border-color: #e1bee7;">
+                <div class="step-badge shadow-sm" style="background-color: #6a1b9a;">2</div>
+                <div class="step-text">
+                    <span class="step-title" style="color: #6a1b9a;">SELECCIONAR</span>
+                    En el panel derecho selecciona todos los profesores que quieras.
+                </div>
+            </div>
+            <div class="col-md-4 d-flex align-items-start">
+                <div class="step-badge shadow-sm" style="background-color: #6a1b9a;">3</div>
+                <div class="step-text">
+                    <span class="step-title" style="color: #6a1b9a;">GENERAR</span>
+                    Presiona generar horarios y visualiza todas las combinaciones.
                 </div>
             </div>
         </div>
     </div>
-
-    <div id="vista-auto" class="container-fluid p-0" style="display:none;">
-        <div class="d-flex flex-column gap-3">
-            <div class="row g-3" style="height: 80vh;">
-                <div class="col-lg-3 col-md-4 d-flex flex-column gap-3 h-100">
-                    <div class="card shadow-sm flex-grow-1" style="min-height: 0;">
-                        <div class="card-header bg-white py-3">
-                            <h6 class="fw-bold mb-2 text-primary"><i class="bi bi-search"></i> 1. Elige Materia</h6>
-                            <input type="text" id="buscador-auto" class="form-control form-control-sm" placeholder="Buscar materia..." onkeyup="filtrarMateriasAuto()">
-                        </div>
-                        <div class="card-body p-0 overflow-auto">
-                            <div id="lista-materias-auto" class="list-group list-group-flush"></div>
-                        </div>
+        <div class="row g-3 h-100">
+            
+            <div class="col-lg-3 col-md-4 d-flex flex-column gap-3" style="height: 85vh;">
+                
+                <div class="card shadow-sm flex-grow-1" style="min-height: 0; overflow: hidden;">
+                    <div class="card-header bg-white py-3">
+                        <h6 class="fw-bold mb-2" style="color: #6a1b9a;"><i class="bi bi-search"></i> 1. Elige Materia</h6>
+                        <input type="text" id="buscador-auto" class="form-control form-control-sm" placeholder="Buscar materia..." onkeyup="filtrarMateriasAuto()">
                     </div>
-                    <div class="card border-0 shadow-sm flex-shrink-0" style="max-height: 40%;">
-                        <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                            <span class="fw-bold small">2. Mis Selecciones</span>
-                            <button class="btn btn-sm text-danger" onclick="limpiarBolsa()"><i class="bi bi-trash"></i></button>
-                        </div>
-                        <ul id="lista-bolsa" class="list-group list-group-flush small overflow-auto" style="max-height: 150px;">
+                    <div class="card-body p-0" style="overflow-y: auto; height: 100%;">
+                        <div id="lista-materias-auto" class="list-group list-group-flush"></div>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm flex-shrink-0" style="max-height: 40%; overflow: hidden;">
+                    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                        <span class="fw-bold small text-uppercase" style="color: #6a1b9a;"><i class="bi bi-list-check"></i> 3. Mis Selecciones</span>
+                        <button class="btn btn-sm text-danger" onclick="limpiarBolsa()" title="Limpiar todo"><i class="bi bi-trash"></i></button>
+                    </div>
+                    <div class="card-body p-0" style="overflow-y: auto;">
+                        <ul id="lista-bolsa" class="list-group list-group-flush small">
                             <li class="list-group-item text-muted text-center py-3">Vacío</li>
                         </ul>
-                        <div class="card-body bg-light border-top p-2">
-                            <button class="btn btn-warning w-100 fw-bold text-dark py-2" onclick="generarCombinaciones()">GENERAR HORARIOS</button>
-                        </div>
                     </div>
-                </div>
-                
-                <div class="col-lg-9 col-md-8 h-100">
-                    <div class="card border-0 shadow h-100">
-                        <div class="card-header bg-white fw-bold d-flex justify-content-between align-items-center">
-                            <div>
-                                <span>Resultados</span>
-                                <span id="conteo-resultados" class="badge bg-light text-dark border">0 opciones</span>
-                            </div>
-                            <button class="btn btn-sm btn-outline-primary" id="btn-recolor-auto" onclick="recolorearAuto()" style="display:none;" title="Cambiar paleta de colores de todos los resultados">
-                                <i class="bi bi-palette"></i> Recolorear Resultados
-                            </button>
-                        </div>
-                        <div id="panel-filtros-resultados" class="panel-filtros p-2" style="display:none;">
-                            <div class="row g-2">
-                                <div class="col-md-3"><span class="label-filtro">Ordenar:</span><select id="sort-resultados" class="form-select form-select-sm border-primary" onchange="aplicarOrdenYFiltro()"><option value="dias">Menos Días</option><option value="creditos">Más Créditos</option><option value="huecos">Menos Huecos</option></select></div>
-                                <div class="col-md-3"><span class="label-filtro">Turno:</span><select id="filtro-turno" class="form-select form-select-sm border-primary" onchange="aplicarOrdenYFiltro()"><option value="">Cualquiera</option><option value="matutino">Matutino</option><option value="vespertino">Vespertino</option></select></div>
-                                <div class="col-md-3">
-                                    <span class="label-filtro">Días Libres:</span>
-                                    <div class="dropdown" id="dropdown-dias-container">
-                                        <button class="btn btn-sm btn-outline-primary dropdown-toggle w-100 text-truncate" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="btn-filtro-dia" style="font-size:0.75rem;">Ninguno</button>
-                                        <div class="dropdown-menu p-2 shadow" onclick="event.stopPropagation()">
-                                            <div class="form-check mb-1"><input class="form-check-input chk-filtro-dia" type="checkbox" value="LUNES" id="fd-l" onchange="aplicarOrdenYFiltro()"><label class="form-check-label small" for="fd-l">Lunes</label></div>
-                                            <div class="form-check mb-1"><input class="form-check-input chk-filtro-dia" type="checkbox" value="MARTES" id="fd-m" onchange="aplicarOrdenYFiltro()"><label class="form-check-label small" for="fd-m">Martes</label></div>
-                                            <div class="form-check mb-1"><input class="form-check-input chk-filtro-dia" type="checkbox" value="MIERCOLES" id="fd-mi" onchange="aplicarOrdenYFiltro()"><label class="form-check-label small" for="fd-mi">Miércoles</label></div>
-                                            <div class="form-check mb-1"><input class="form-check-input chk-filtro-dia" type="checkbox" value="JUEVES" id="fd-j" onchange="aplicarOrdenYFiltro()"><label class="form-check-label small" for="fd-j">Jueves</label></div>
-                                            <div class="form-check mb-1"><input class="form-check-input chk-filtro-dia" type="checkbox" value="VIERNES" id="fd-v" onchange="aplicarOrdenYFiltro()"><label class="form-check-label small" for="fd-v">Viernes</label></div>
-                                            <div class="form-check mb-1"><input class="form-check-input chk-filtro-dia" type="checkbox" value="SABADO" id="fd-s" onchange="aplicarOrdenYFiltro()"><label class="form-check-label small" for="fd-s">Sábado</label></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <span class="label-filtro">Profesores:</span>
-                                    <div class="dropdown" id="dropdown-profes-container">
-                                        <button class="btn btn-sm btn-outline-primary dropdown-toggle w-100 text-truncate" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="btn-filtro-profe" style="font-size:0.75rem;">Todos</button>
-                                        <div class="dropdown-menu p-2 shadow" style="width: 250px; max-height: 300px; overflow-y: auto;" onclick="event.stopPropagation()">
-                                            <input type="text" class="form-control form-control-sm mb-2" placeholder="Buscar profe..." onkeyup="filtrarListaProfesResultados(this)">
-                                            <div class="d-flex justify-content-between mb-2 pb-1 border-bottom">
-                                                 <button class="btn btn-sm btn-link p-0 text-decoration-none" onclick="toggleAllProfesResultados(true)" style="font-size:0.75rem;">Seleccionar Todos</button>
-                                                 <button class="btn btn-sm btn-link p-0 text-decoration-none text-danger" onclick="toggleAllProfesResultados(false)" style="font-size:0.75rem;">Limpiar</button>
-                                            </div>
-                                            <div id="lista-profes-filtro-resultados"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body bg-light overflow-auto p-0" id="resultados-auto">
-                            <div class="text-center text-muted py-5"><p class="small">Configura tus candidatos abajo y genera horarios.</p></div>
-                        </div>
+                    <div class="card-footer bg-light border-top p-2">
+                        <button class="btn btn-custom-auto w-100 fw-bold py-2" onclick="generarCombinaciones()">
+                             <i class="bi bi-cpu-fill"></i> GENERAR HORARIOS
+                        </button>
                     </div>
                 </div>
             </div>
-
-            <div id="contenedor-panel-auto" class="card shadow-sm border-0 flex-shrink-0 mt-3" style="height: 300px;">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <h6 class="fw-bold mb-0 text-primary" id="titulo-seleccion-auto"><i class="bi bi-arrow-left-circle"></i> Selecciona candidatos</h6>
-                    <span class="badge bg-light text-dark border" id="info-seleccion-auto">Esperando...</span>
+            
+            <div class="col-lg-9 col-md-8 d-flex flex-column h-100">
+                
+                <div id="contenedor-panel-auto" class="card shadow-sm border-0 mb-3 flex-shrink-0" style="height: 280px;">
+                    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                        <h6 class="fw-bold mb-0" id="titulo-seleccion-auto" style="color: #6a1b9a;"><i class="bi bi-arrow-left-circle"></i> 3. Selecciona Profesores o grupos</h6>
+                        <span class="badge bg-light text-dark border" id="info-seleccion-auto">Esperando...</span>
+                    </div>
+                    <div class="card-body bg-light">
+                        <div id="contenedor-grupos-auto" class="horizontal-scroll-container">
+                            <div class="text-center text-muted py-5 w-100">
+                                <i class="bi bi-hand-index-thumb display-4 opacity-25"></i>
+                                <p class="mt-3 lead small">Selecciona una materia a la izquierda para ver sus grupos o profesores aquí.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body bg-light">
-                    <div id="contenedor-grupos-auto" class="horizontal-scroll-container">
-                        <div class="text-center text-muted py-5 w-100"><i class="bi bi-hand-index-thumb display-1 opacity-25"></i><p class="mt-3 lead">Selecciona una materia a la izquierda.</p></div>
+
+                <div class="card border-0 shadow flex-grow-1" style="min-height: 0;">
+                    
+                    <div class="card-header bg-white fw-bold d-flex justify-content-between align-items-center">
+                        <div>
+                            <span style="color: #6a1b9a;"><i class="bi bi-table"></i> Resultados</span> 
+                            <span id="conteo-resultados" class="badge bg-light text-dark border ms-2">0 opciones</span>
+                        </div>
+                        <button class="btn btn-sm btn-outline-secondary" id="btn-recolor-auto" onclick="recolorearAuto()" style="display:none; color: #6a1b9a; border-color: #6a1b9a;" title="Cambiar paleta">
+                            <i class="bi bi-palette"></i> Recolorear
+                        </button>
+                    </div>
+                    
+                    <div id="panel-filtros-resultados" class="panel-filtros p-2" style="display:none;">
+                        <div class="row g-2">
+                            <div class="col-md-3"><span class="label-filtro">Ordenar:</span><select id="sort-resultados" class="form-select form-select-sm border-primary" onchange="aplicarOrdenYFiltro()"><option value="dias">Menos Días</option><option value="creditos">Más Créditos</option><option value="huecos">Menos Huecos</option></select></div>
+                            <div class="col-md-3"><span class="label-filtro">Turno:</span><select id="filtro-turno" class="form-select form-select-sm border-primary" onchange="aplicarOrdenYFiltro()"><option value="">Cualquiera</option><option value="matutino">Matutino</option><option value="vespertino">Vespertino</option></select></div>
+                            <div class="col-md-3">
+                                <span class="label-filtro">Días Libres:</span>
+                                <div class="dropdown" id="dropdown-dias-container">
+                                    <button class="btn btn-sm btn-outline-primary dropdown-toggle w-100 text-truncate" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="btn-filtro-dia" style="font-size:0.75rem;">Ninguno</button>
+                                    <div class="dropdown-menu p-2 shadow" onclick="event.stopPropagation()">
+                                        <div class="form-check mb-1"><input class="form-check-input chk-filtro-dia" type="checkbox" value="LUNES" id="fd-l" onchange="aplicarOrdenYFiltro()"><label class="form-check-label small" for="fd-l">Lunes</label></div>
+                                        <div class="form-check mb-1"><input class="form-check-input chk-filtro-dia" type="checkbox" value="MARTES" id="fd-m" onchange="aplicarOrdenYFiltro()"><label class="form-check-label small" for="fd-m">Martes</label></div>
+                                        <div class="form-check mb-1"><input class="form-check-input chk-filtro-dia" type="checkbox" value="MIERCOLES" id="fd-mi" onchange="aplicarOrdenYFiltro()"><label class="form-check-label small" for="fd-mi">Miércoles</label></div>
+                                        <div class="form-check mb-1"><input class="form-check-input chk-filtro-dia" type="checkbox" value="JUEVES" id="fd-j" onchange="aplicarOrdenYFiltro()"><label class="form-check-label small" for="fd-j">Jueves</label></div>
+                                        <div class="form-check mb-1"><input class="form-check-input chk-filtro-dia" type="checkbox" value="VIERNES" id="fd-v" onchange="aplicarOrdenYFiltro()"><label class="form-check-label small" for="fd-v">Viernes</label></div>
+                                        <div class="form-check mb-1"><input class="form-check-input chk-filtro-dia" type="checkbox" value="SABADO" id="fd-s" onchange="aplicarOrdenYFiltro()"><label class="form-check-label small" for="fd-s">Sábado</label></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <span class="label-filtro">Profesores:</span>
+                                <div class="dropdown" id="dropdown-profes-container">
+                                    <button class="btn btn-sm btn-outline-primary dropdown-toggle w-100 text-truncate" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="btn-filtro-profe" style="font-size:0.75rem;">Todos</button>
+                                    <div class="dropdown-menu p-2 shadow" style="width: 250px; max-height: 300px; overflow-y: auto;" onclick="event.stopPropagation()">
+                                        <input type="text" class="form-control form-control-sm mb-2" placeholder="Buscar profe..." onkeyup="filtrarListaProfesResultados(this)">
+                                        <div class="d-flex justify-content-between mb-2 pb-1 border-bottom">
+                                             <button class="btn btn-sm btn-link p-0 text-decoration-none" onclick="toggleAllProfesResultados(true)" style="font-size:0.75rem;">Seleccionar Todos</button>
+                                             <button class="btn btn-sm btn-link p-0 text-decoration-none text-danger" onclick="toggleAllProfesResultados(false)" style="font-size:0.75rem;">Limpiar</button>
+                                        </div>
+                                        <div id="lista-profes-filtro-resultados"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body bg-light overflow-auto p-0" id="resultados-auto">
+                        <div class="text-center text-muted py-5"><p class="small">Configura tus profesores arriba y genera horarios.</p></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
 <div class="modal fade" id="modalDetallesMateria" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -557,39 +738,93 @@
 
 <footer class="mt-auto bg-white border-top py-4">
     <div class="container text-center">
-        <button class="btn btn-outline-primary btn-sm mb-3" data-bs-toggle="modal" data-bs-target="#modalReglas">Ver Normativa Académica y Créditos</button>
-        <p class="small text-muted mb-1">⚠️ <strong>Importante:</strong> Simulador académico. Inscripción oficial en SIAE/DGAE.</p>
-        <p class="small text-muted opacity-75">No afiliado oficialmente a la administración de la Facultad de Psicología de la UNAM.</p>
-        <p class="small text-primary mt-2 fw-bold">¡Mucha suerte en sus inscripciones!</p>
+        <button class="btn btn-outline-primary btn-sm mb-3" data-bs-toggle="modal" data-bs-target="#modalReglas">
+            <i class="bi bi-info-circle"></i> Ver Normativa Académica y Créditos
+        </button>
+        
+        <div class="mx-auto" style="max-width: 700px;">
+            <p class="small text-muted mb-1">
+                <strong>Aviso Importante:</strong> Esta herramienta es un simulador. Los horarios y profesores están <strong>sujetos a cambios</strong> de último momento por parte de la administración de la Facultad.
+            </p>
+            <p class="small text-muted mb-1">
+                Nos esforzamos por mantener la base de datos actualizada ante cualquier aviso, sin embargo, <strong>no nos hacemos responsables</strong> por discrepancias entre este generador y el sistema oficial al momento de tu inscripción.
+            </p>
+        </div>
+
+        <p class="small text-primary mt-3 fw-bold">¡Mucha suerte en sus inscripciones!</p>
     </div>
 </footer>
 
-<div class="modal fade" id="modalReglas" tabindex="-1"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header bg-light"><h5 class="modal-title fw-bold text-primary">Normativa Académica</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body small"><ul class="list-group list-group-flush"><li class="list-group-item"><i class="bi bi-info-circle-fill text-primary"></i> Puedes pasarte de 3 o 4 créditos de los 310 créditos totales.</li><li class="list-group-item"><i class="bi bi-link-45deg"></i> Revisa el programa de las asignaturas en: <a href="http://www.psicologia.unam.mx/programa-completo-de-la-licenciatura-en-psicologia/" target="_blank">Programa Completo</a></li><li class="list-group-item"><i class="bi bi-check-circle-fill text-success"></i> El sistema te permite inscribir un máximo de <strong>41 créditos</strong> más un recursamiento.</li><li class="list-group-item"><i class="bi bi-clock-history text-warning"></i> El plazo que tienes para inscribir asignaturas en periodo ordinario es de <strong>12 semestres</strong>. Una vez terminado podrás terminar tus créditos solo mediante exámenes extraordinarios.</li><li class="list-group-item"><i class="bi bi-arrow-repeat text-secondary"></i> Si tienes NP o 5 en una asignatura optativa podrás volver a recursarla o cambiar por otra opción.</li><li class="list-group-item"><i class="bi bi-search"></i> Algunas asignaturas optativas no se ofertan todos los semestres, revisa la oferta en: <a href="http://132.248.25.133/alumno/horarios/publicar/" target="_blank">Horarios Oficiales</a></li><li class="list-group-item"><i class="bi bi-globe-americas text-danger"></i> Las asignaturas cursadas en el programa de Movilidad Estudiantil se revalidan con alguna asignatura del Plan de Estudios de la Facultad de Psicología.</li><li class="list-group-item"><i class="bi bi-building"></i> Las asignaturas cursadas en otro plantel se reflejan en la Historia Académica, por lo tanto, los créditos de esas asignaturas cuentan para el máximo de créditos permitidos por semestre (41 créditos).</li><li class="list-group-item bg-light mt-2 rounded">Revisa estos y otros datos en la Guía Académica de la Licenciatura en: <a href="https://docs.google.com/document/d/1GalNWJoFfRZmhtdjycqGOmGGsVvxzUZ8wUkhRkK-zIg/edit#" target="_blank">Guía Académica Google Docs</a></li></ul></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Entendido</button></div></div></div></div>
-<div id="toast-guardado"><i class="bi bi-save"></i> Guardado</div>
+<div class="modal fade" id="modalReglas" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title fw-bold text-primary"><i class="bi bi-journal-bookmark-fill"></i> Normativa y Créditos</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-0">
+                <ul class="list-group list-group-flush small">
+                    
+                    <li class="list-group-item bg-warning bg-opacity-10 border-start border-4 border-warning p-3">
+                        <h6 class="fw-bold text-dark mb-2"><i class="bi bi-speedometer2"></i> Carga Académica:</h6>
+                        <div class="d-flex gap-2 align-items-center flex-wrap">
+                            <span class="badge bg-warning text-dark border border-warning">Mínimo 37 Créditos</span>
+                            <span class="text-muted">Carga ideal para acabar en tiempo.</span>
+                        </div>
+                        <div class="d-flex gap-2 align-items-center flex-wrap mt-1">
+                            <span class="badge bg-danger border border-danger">Máximo 41 Créditos</span>
+                            <span class="text-muted">Tope del sistema (+1 recursamiento).</span>
+                        </div>
+                    </li>
 
+                    <li class="list-group-item px-4 py-3">
+                        <div class="fw-bold text-primary mb-1">1. Límites y Plazos</div>
+                        <p class="mb-1">El sistema permite inscribir hasta <strong>41 créditos</strong> semestrales, con opción a un recursamiento adicional. Tienes un margen de tolerancia de 3 a 4 créditos sobre los 310 totales del plan.</p>
+                        <p class="mb-0 text-muted fst-italic">Dispones de <strong>12 semestres</strong> para cursar en periodo ordinario; al finalizar este plazo, solo podrás acreditar mediante exámenes extraordinarios.</p>
+                    </li>
+
+                    <li class="list-group-item px-4 py-3">
+                        <div class="fw-bold text-primary mb-1">2. Asignaturas Optativas y Reprobación</div>
+                        <p class="mb-1">Si obtienes una calificación de <strong>NP o 5</strong> en una optativa, tienes la libertad de recursar la misma materia o elegir una distinta.</p>
+                        <p class="mb-0 text-muted">Recuerda que la oferta de optativas es variable; no todas se abren cada semestre. Verifica disponibilidad <a href="http://132.248.25.133/alumno/horarios/publicar/" target="_blank" class="fw-bold text-decoration-none">aquí</a>.</p>
+                    </li>
+
+                    <li class="list-group-item px-4 py-3">
+                        <div class="fw-bold text-primary mb-1">3. Movilidad y Planteles Externos</div>
+                        <p class="mb-0">Las materias cursadas en otros planteles o en programas de Movilidad Estudiantil aparecerán en tu Historia Académica y serán revalidadas según el Plan de Estudios. <strong>Ojo:</strong> Sus créditos se suman a tu tope semestral permitido (41 créditos).</p>
+                    </li>
+
+                    <li class="list-group-item bg-light px-4 py-3">
+                        <div class="d-flex align-items-start gap-2">
+                            <i class="bi bi-link-45deg fs-4 text-primary"></i>
+                            <div>
+                                <strong>Enlaces de consulta oficial:</strong><br>
+                                <a href="http://www.psicologia.unam.mx/programa-completo-de-la-licenciatura-en-psicologia/" target="_blank" class="text-decoration-none me-3"><i class="bi bi-file-earmark-text"></i> Ver Programas de Asignatura</a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Entendido</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="toast-guardado"><i class="bi bi-save"></i> Guardado</div>
 <script>
-    let BD_CRUDA=[], BD_AGRUPADA=[], miHorario=[], bolsa={}, materiaSeleccionadaActual=null, materiaSeleccionadaAuto=null;
+let BD_CRUDA=[], BD_AGRUPADA=[], miHorario=[], bolsa={}, materiaSeleccionadaActual=null, materiaSeleccionadaAuto=null;
     let MAPA_COLORES_ASIGNADOS = {}; 
     let OFFSET_RECOLOR = 0; 
-    let OFFSET_RECOLOR_AUTO = 0; // Offset para el modo automático
+    let OFFSET_RECOLOR_AUTO = 0;
     let RESULTADOS_GLOBALES = []; 
     let RESULTADOS_MOSTRADOS = []; 
-    
-    // HISTORIAL DE ESTADOS (UNDO / REDO)
     let historial = [];
     let futuro = [];
-
-    // VARIABLES PARA EL ESTADO DEL PANEL FIJO
     let panelFijoActivo = false;
-
-    // VARIABLE PARA MANEJO DE MÚLTIPLES TRASLAPES
-    // Ahora es un array para soportar múltiples
-    let materiasPendientes = []; // Array de { curso, conflictos: [] }
-
-    // VARIABLES DE CONFIGURACIÓN VISUAL
+    let materiasPendientes = [];
     let configVisual = { prof: true, grupo: true, horas: true };
-
-    // GESTIÓN DE HORARIOS MÚLTIPLES
     let horariosGuardados = {};
     let activeScheduleId = "default";
 
@@ -608,40 +843,29 @@
     function minutosAHora(minutos) { let h = Math.floor(minutos / 60); let m = minutos % 60; return `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`; }
     function asignarColorFijo(id_unico) { if(MAPA_COLORES_ASIGNADOS[id_unico]) return; let count = Object.keys(MAPA_COLORES_ASIGNADOS).length; let color = PALETA_ORDENADA[count % PALETA_ORDENADA.length]; MAPA_COLORES_ASIGNADOS[id_unico] = color; }
     
-    // FUNCIONES UNDO / REDO
+    // --- LÓGICA DE UNDO/REDO ---
     function registrarEstado() {
-        // Guardamos una copia profunda del estado actual antes de modificarlo
         historial.push(JSON.parse(JSON.stringify(miHorario)));
-        // Si haces una nueva acción, el futuro se borra
         futuro = [];
         actualizarBotonesUndo();
     }
 
     function undo() {
         if(historial.length === 0) return;
-        // Guardar estado actual en futuro
         futuro.push(JSON.parse(JSON.stringify(miHorario)));
-        // Recuperar último estado
         miHorario = historial.pop();
-        
-        // Limpiar pendientes al hacer undo
         materiasPendientes = [];
-        
-        guardarEstado(); // Guardar en localStorage
+        guardarEstado();
         actualizarUICompleta();
         actualizarBotonesUndo();
     }
 
     function redo() {
         if(futuro.length === 0) return;
-        // Guardar estado actual en historial
         historial.push(JSON.parse(JSON.stringify(miHorario)));
-        // Recuperar estado futuro
         miHorario = futuro.pop();
-        
         materiasPendientes = [];
-
-        guardarEstado(); // Guardar en localStorage
+        guardarEstado();
         actualizarUICompleta();
         actualizarBotonesUndo();
     }
@@ -662,7 +886,7 @@
 
     function recolorearAuto() {
         OFFSET_RECOLOR_AUTO++;
-        dibujarResultados(RESULTADOS_MOSTRADOS); // Redibuja con el nuevo offset
+        dibujarResultados(RESULTADOS_MOSTRADOS);
     }
     
     function obtenerChoques(c1, lista) {
@@ -688,14 +912,17 @@
     function hayChoque(c1, lista) { return obtenerChoques(c1, lista).length > 0; }
     function hayChoqueCombo(lista) { for(let i=0; i<lista.length; i++) { for(let j=i+1; j<lista.length; j++) { if(hayChoque(lista[i], [lista[j]])) return true; } } return false; }
 
+    // --- DESACTIVADO EL SCROLL AUTOMÁTICO ---
     function scrollToPanel(idPanel) {
+        // COMENTADO POR PETICIÓN DEL USUARIO: "no te haga el scroll automatico"
+        /*
         setTimeout(() => {
             let el = document.getElementById(idPanel);
             if(el) el.scrollIntoView({ behavior: 'smooth', block: 'end' });
         }, 100);
+        */
     }
 
-    // Configuración visual
     function actualizarConfigVisual() {
         configVisual.prof = document.getElementById('chk-prof').checked;
         configVisual.grupo = document.getElementById('chk-grupo').checked;
@@ -781,8 +1008,6 @@
         });
         BD_AGRUPADA = Object.values(temp);
     }
-
-    // === GESTIÓN DE HORARIOS MÚLTIPLES ===
 
     function guardarEstado() { 
         horariosGuardados[activeScheduleId].cursos = miHorario;
@@ -900,7 +1125,6 @@
 
     function crearGridVisualVacia() { let tbody = document.getElementById('grid-horario-visual'); tbody.innerHTML = ''; let startMin = 7 * 60; let endMin = 21 * 60; for(let m = startMin; m < endMin; m += 30) { let tr = document.createElement('tr'); let horaStr = minutosAHora(m); let idHora = m; let tdHora = document.createElement('td'); tdHora.className = 'hora-col'; tdHora.innerText = horaStr; tr.appendChild(tdHora); ['LUNES','MARTES','MIERCOLES','JUEVES','VIERNES','SABADO'].forEach(dia => { let td = document.createElement('td'); td.id = `grid-${dia}-${idHora}`; td.dataset.dia = dia; td.dataset.min = idHora; tr.appendChild(td); }); tbody.appendChild(tr); } }
     
-    // FUNCIONES PARA RESALTAR GRUPO COMPLETO AL HACER HOVER
     function resaltarMateria(idUnico) {
         let bloques = document.querySelectorAll(`.bloque-${idUnico}`);
         bloques.forEach(b => b.classList.add('bloque-resaltado'));
@@ -913,14 +1137,12 @@
     function renderizarHorarioVisual() { 
         document.querySelectorAll('#grid-horario-visual .bloque-materia').forEach(el => el.remove()); 
         
-        // Renderizar cursos inscritos
         miHorario.forEach(curso => { 
             if(!MAPA_COLORES_ASIGNADOS[curso.id_unico]) asignarColorFijo(curso.id_unico); 
             let color = MAPA_COLORES_ASIGNADOS[curso.id_unico]; 
             insertarBloque(curso, color, false);
         }); 
 
-        // Renderizar previsualizaciones (Traslapes múltiples)
         materiasPendientes.forEach(item => {
             insertarBloque(item.curso, 'transparent', true);
         });
@@ -946,7 +1168,6 @@
                     bloque.classList.add('bloque-traslape');
                 } else {
                     bloque.style.backgroundColor = color; 
-                    // Eventos hover solo para materias confirmadas
                     bloque.onmouseenter = () => resaltarMateria(curso.id_unico);
                     bloque.onmouseleave = () => quitarResaltado(curso.id_unico);
                 }
@@ -977,7 +1198,7 @@
     
     function eliminarDesdeModal(id) { 
         if(!confirm("¿Estás seguro de eliminar esta materia?")) return; 
-        registrarEstado(); // Undo
+        registrarEstado();
         let idx = miHorario.findIndex(c => c.id_unico === id); 
         if(idx > -1) { 
             let borrada = miHorario[idx]; 
@@ -1039,49 +1260,106 @@
         let divAlerta = document.getElementById('alerta-semestre');
         divAlerta.innerHTML = '';
         if(val === 'adicional') {
-            divAlerta.innerHTML = `<div class="alert alert-info shadow-sm" role="alert"><div class="d-flex align-items-center mb-2"><i class="bi bi-info-circle-fill fs-4 me-2 text-primary"></i><h5 class="alert-heading fw-bold mb-0">Semestre Adicional: Reglas de Selección</h5></div><hr class="my-2"><div class="row align-items-center"><div class="col-md-8"><p class="small mb-1"><strong><i class="bi bi-card-checklist"></i> Requisitos Académicos:</strong></p><ul class="small mb-2 ps-3"><li>Elige asignaturas de <strong>6° y 8° semestre</strong> de la oferta vigente.</li><li>Propón asignaturas que <strong>no hayas inscrito previamente</strong>.</li><li>Rango de créditos obligatorio: <strong>Mínimo 31 - Máximo 41</strong>.</li></ul><p class="small mb-0"><strong><i class="bi bi-file-earmark-text"></i> Entregar en SAE:</strong> Justificación académica, Carta liberación SS, Constancia idioma.</p></div><div class="col-md-4 mt-2 mt-md-0"><div class="bg-white p-3 rounded border border-primary"><label class="form-label fw-bold text-primary small mb-1">Sistema de Pertenencia:</label><select id="filtro-sistema" class="form-select form-select-sm border-primary" onchange="filtrarMaterias(); filtrarMateriasAuto();"><option value="escolarizado">Escolarizado (Gpos. 1000-8000)</option><option value="sua">SUA (Gpos. 9000)</option></select><small class="text-danger fw-bold d-block mt-1"><i class="bi bi-cone-striped"></i> El sistema de SUA sigue en construcción.</small></div></div></div></div>`;
+            divAlerta.innerHTML = `<div class="alert alert-info shadow-sm" role="alert"><div class="d-flex align-items-center mb-2"><i class="bi bi-info-circle-fill fs-4 me-2 text-primary"></i><h5 class="alert-heading fw-bold mb-0">Semestre Adicional: Reglas de Selección</h5></div><hr class="my-2"><div class="row align-items-center"><div class="col-md-8"><p class="small mb-1"><strong><i class="bi bi-card-checklist"></i> Requisitos Académicos:</strong></p><ul class="small mb-2 ps-3"><li>Elige asignaturas de <strong>6° y 8° semestre</strong> de la oferta vigente.</li><li>Propón asignaturas que <strong>no hayas inscrito previamente</strong>.</li><li>Rango de créditos obligatorio: <strong>Mínimo 31 - Máximo 41</strong>.</div><div class="col-md-4 mt-2 mt-md-0"><div class="bg-white p-3 rounded border border-primary"><label class="form-label fw-bold text-primary small mb-1">Sistema de Pertenencia:</label><select id="filtro-sistema" class="form-select form-select-sm border-primary" onchange="filtrarMaterias(); filtrarMateriasAuto();"><option value="escolarizado">Escolarizado (Gpos. 6000-8000)</option><option value="sua">SUA (Gpos. 9000)</option></select><small class="text-danger fw-bold d-block mt-1"><i`;
         }
         else if(sem === 2) {
-            divAlerta.innerHTML = `<div class="alert alert-info alert-dismissible fade show shadow-sm" role="alert"><h5 class="alert-heading"><i class="bi bi-people-fill"></i> ¡Hola, estudiante de Segundo Semestre!</h5><p class="small mb-1">Sabemos que en 2do semestre los horarios funcionan por grupos completos. Tips:</p><ul class="small mb-2"><li><strong>Grupos Espejo:</strong> Los grupos 2001 y 2002, 2003 y 2004, 2005 y 2007, 2006 y 2008, 2009 y 2011 y 2010 y 2012 tienen las mismas horas. Es fácil intercambiar profesores entre ellos.</li><li><strong>Recomendación:</strong> Usa el <strong>Modo Manual</strong>. Elige un grupo base (ej. 2003) y si un profe no te gusta, cámbialo por el del grupo espejo.</li><li>Si quieres usar el modo exploratorio, usa los filtros, te serán de ayuda para ver otras combinaciones.</li></ul><button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>`;
+            divAlerta.innerHTML = `<div class="alert alert-info alert-dismissible fade show shadow-sm" role="alert"><h5 class="alert-heading"><i class="bi bi-people-fill"></i> ¡Hola, estudiante de Segundo Semestre!</h5><p class="small mb-1">Sabemos que en 2do semestre los horarios funcionan por grupos completos. Por lo que te recomendamos tener en cuenta lo siguiente:</p><ul class="small mb-2"><li><strong>¿Qué son los Grupos Espejo?:</strong> Son dos o más grupos que se imparten exactamente en el mismo horario, pero con diferente profesor. <li><strong>¿Cuáles son los Grupos Espejo?:</strong> El grupo 2001 y 2002. 2003 y 2004. 2005 y 2006. 2007 y 2008. 2010 y 2011.  </li><li><strong>Recomendación:</strong> Usa el <strong>Modo Manual</strong>. Elige un grupo base (ej. 2003) y si un profe no te gusta, cámbialo por el del grupo espejo.</li><li>Si quieres usar el modo exploratorio, usa los filtros, te serán de ayuda para ver otras combinaciones.</li></ul><button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>`;
         } 
         else if (sem === 4) {
-             divAlerta.innerHTML = `<div class="alert alert-info alert-dismissible fade show shadow-sm" role="alert"><h5 class="alert-heading fw-bold"><i class="bi bi-people-fill"></i> ¡Hola, estudiante de Cuarto Semestre!</h5><p class="small mb-2">Sabemos que en 4to semestre los horarios funcionan por grupos completos. Tips:</p><ul class="small mb-0"><li class="mb-1"><strong>Grupos Espejo:</strong> Los grupos 4001 y 4002, 4003 y 4004, 4005 y 4006, 4007, 4008 y 4009, 4011 y 4012 tienen las mismas horas. Es fácil intercambiar profesores entre ellos.</li><li class="mb-1"><strong>Recomendación:</strong> Usa el <strong>Modo Manual</strong>. Elige un grupo base (ej. 4003) y si un profe no te gusta, cámbialo por el del grupo espejo.</li><li class="mb-2">Si quieres usar el modo exploratorio, usa los filtros, te serán de ayuda para ver otras combinaciones.</li><li class="mt-2 p-2 bg-warning bg-opacity-10 border border-warning rounded text-dark"><strong><i class="bi bi-exclamation-triangle-fill"></i> IMPORTANTE ACA III:</strong> Por cada grupo de <em>APRENDIZAJE Y CONDUCTA ADAPTAT. III</em> le corresponden 2 grupos de (Práctica). Asegúrate de elegir el grupo correspondiente de prácticas acorde a lo que dicen las <strong>observaciones</strong> del grupo de Teoría.</li></ul><button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>`;
+             divAlerta.innerHTML = `<div class="alert alert-info alert-dismissible fade show shadow-sm" role="alert"><h5 class="alert-heading fw-bold"><i class="bi bi-people-fill"></i> ¡Hola, estudiante de Cuarto Semestre!</h5><p class="small mb-2">Sabemos que en 4to semestre los horarios funcionan por grupos completos. Por lo que te recomendamos tener en cuenta los siguiente:</p><ul class="small mb-0"><li class="mb-1"><strong>Grupos Espejo:</strong> Grupos: 4001 y 4002. 4003 y 4004. 4005 y 4006. 4007 - 4008 y 4009. 4011 y 4012 tienen las mismas horas. Es fácil intercambiar profesores entre ellos.</li><li class="mb-1"><strong>Recomendación:</strong> Usa el <strong>Modo Manual</strong>. Elige un grupo base (ej. 4003) y si un profe no te gusta, cámbialo por el del grupo espejo.</li><li class="mb-2">Si quieres usar el modo exploratorio, usa los filtros, te serán de ayuda para ver otras combinaciones.</li><li class="mt-2 p-2 bg-warning bg-opacity-10 border border-warning rounded text-dark"><strong><i class="bi bi-exclamation-triangle-fill"></i> IMPORTANTE ACA III:</strong> Por cada grupo de <em>APRENDIZAJE Y CONDUCTA ADAPTAT. III</em> le corresponden 2 grupos de (Práctica). Asegúrate de elegir el grupo correspondiente de prácticas acorde a lo que dicen las <strong>observaciones</strong> del grupo de Teoría.</li></ul><button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>`;
         }
         
         filtrarMaterias();
         filtrarMateriasAuto(); 
     }
-
-    function cambiarModo(m) { 
-        document.getElementById('tab-manual').className=`nav-link ${m==='manual'?'active':''}`; 
-        document.getElementById('tab-auto').className=`nav-link ${m==='auto'?'active':''}`; 
-        document.getElementById('vista-manual').style.display=m==='manual'?'flex':'none'; 
-        document.getElementById('vista-auto').style.display=m==='auto'?'block':'none'; 
+    
+    function activarModo(modo) {
+        cambiarModo(modo);
+        setTimeout(() => {
+            let destino = modo === 'manual' ? 'vista-manual' : 'vista-auto';
+            let elemento = document.getElementById(destino);
+            if (elemento) {
+                const yOffset = -20; 
+                const y = elemento.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                window.scrollTo({top: y, behavior: 'smooth'});
+            }
+        }, 100);
     }
 
-    // === LÓGICA MODO MANUAL ===
+    function cambiarModo(m) {
+        let vistaManual = document.getElementById('vista-manual');
+        let vistaAuto = document.getElementById('vista-auto');
+        if (vistaManual) {
+            vistaManual.style.display = (m === 'manual') ? 'flex' : 'none';
+        }
+        if (vistaAuto) {
+            vistaAuto.style.display = (m === 'auto') ? 'block' : 'none';
+        }
+    }
+
+    // --- FUNCIÓN CLAVE CON LA LÓGICA DE ACA III (TEXTO ROJO) ---
     function filtrarMaterias() {
         let txt = document.getElementById('buscador').value.toUpperCase();
         let lista = document.getElementById('lista-materias'); lista.innerHTML = '';
         let matSem = obtenerMateriasActivas();
         if(matSem.length === 0) { lista.innerHTML = '<div class="p-3 text-muted small text-center">No hay datos disponibles para esta selección.</div>'; return; }
+        
         let areas = [...new Set(matSem.map(c => c.area))].sort();
+        
+        // Variables para detectar ACA III
+        let semVal = parseInt(document.getElementById('semestre-selector').value);
+        let teoriaACA = "APRENDIZAJE Y CONDUCTA ADAPTAT. III";
+        let practicaACA = "APRENDIZAJE Y CONDUCTA ADAPTAT. III (PRACTICA)";
+        
         areas.forEach(area => {
             let matsEnArea = [...new Set(matSem.filter(c=>c.area===area).map(c=>c.asignatura))].sort();
             let matsFiltradas = matsEnArea.filter(m => m.toUpperCase().includes(txt));
+            
             if(matsFiltradas.length > 0) {
                 let header = document.createElement('div'); header.className = 'area-header'; header.innerText = area; lista.appendChild(header);
+                
                 matsFiltradas.forEach(nom => {
                     let inscrita = miHorario.some(c => c.asignatura === nom);
                     let active = materiaSeleccionadaActual === nom ? 'active-item' : '';
+                    
+                    // --- LÓGICA DE NOTIFICACIÓN ROJA ACA III ---
+                    let htmlAviso = '';
+                    let claseExtra = '';
+
+                    if (semVal === 4) {
+                        if (nom === teoriaACA) {
+                            // Si estoy pintando la Teoría: reviso si ya tengo la práctica, pero NO la teoría
+                            let tengoPractica = miHorario.some(c => c.asignatura === practicaACA);
+                            if (tengoPractica && !inscrita) {
+                                htmlAviso = '<span class="aviso-requerido">Necesaria inscribir</span>';
+                                claseExtra = 'item-requerido';
+                            }
+                        } else if (nom === practicaACA) {
+                            // Si estoy pintando la Práctica: reviso si ya tengo la teoría, pero NO la práctica
+                            let tengoTeoria = miHorario.some(c => c.asignatura === teoriaACA);
+                            if (tengoTeoria && !inscrita) {
+                                htmlAviso = '<span class="aviso-requerido">Necesaria inscribir</span>';
+                                claseExtra = 'item-requerido';
+                            }
+                        }
+                    }
+
                     let item = document.createElement('div');
-                    item.className = `list-group-item materia-item px-3 py-2 ${inscrita ? 'inscrita-item' : ''} ${active}`;
-                    item.innerHTML = `<div class="d-flex justify-content-between align-items-center"><span class="${inscrita?'fw-bold text-success':''}">${nom}</span>${inscrita?'<i class="bi bi-check-circle-fill text-success"></i>':''}</div>`;
+                    item.className = `list-group-item materia-item px-3 py-2 ${inscrita ? 'inscrita-item' : ''} ${active} ${claseExtra}`;
+                    
+                    item.innerHTML = `
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="${inscrita?'fw-bold text-success':''}">${nom}</span>
+                            ${inscrita?'<i class="bi bi-check-circle-fill text-success"></i>':''}
+                        </div>
+                        ${htmlAviso}
+                    `;
+                    
                     item.onclick = () => { 
                         materiaSeleccionadaActual=nom; 
                         filtrarMaterias(); 
                         cargarPanelGrupos(nom);
-                        scrollToPanel('contenedor-panel-manual');
+                        // SIN SCROLL AUTOMÁTICO
                     };
                     lista.appendChild(item);
                 });
@@ -1089,7 +1367,13 @@
         });
     }
 
-    function limpiarPanelGrupos() { document.getElementById('titulo-seleccion').innerHTML = '<i class="bi bi-arrow-left-circle"></i> Selecciona una materia'; document.getElementById('info-seleccion').innerText = 'Esperando...'; document.getElementById('contenedor-grupos').innerHTML = '<div class="text-center text-muted py-5 w-100"><i class="bi bi-hand-index-thumb display-1 opacity-25"></i><p class="mt-3 lead">Selecciona una materia del menú izquierdo.</p></div>'; materiasPendientes=[]; renderizarHorarioVisual(); }
+    function limpiarPanelGrupos() { 
+        document.getElementById('titulo-seleccion').innerHTML = '<i class="bi bi-arrow-left-circle"></i> 2. Selecciona un Profesor'; 
+        document.getElementById('info-seleccion').innerText = 'Esperando...'; 
+        document.getElementById('contenedor-grupos').innerHTML = '<div class="text-center text-muted py-5 w-100"><i class="bi bi-hand-index-thumb display-1 opacity-25"></i><p class="mt-3 lead">Selecciona una materia a la izquierda.</p></div>'; 
+        materiasPendientes=[]; 
+        renderizarHorarioVisual(); 
+    }
     
     function cargarPanelGrupos(asignatura) {
         let semVal = document.getElementById('semestre-selector').value;
@@ -1124,7 +1408,6 @@
             let conflictos = obtenerChoques(c, horarioSinMateriaActual);
             let choca = conflictos.length > 0;
             let yaInscrita = miHorario.some(h => h.id_unico === c.id_unico);
-            // Verificar si está en pendientes
             let esPrevisualizada = materiasPendientes.some(p => p.curso.id_unico === c.id_unico);
             let bloqueadoPorACA = false;
 
@@ -1182,14 +1465,11 @@
 
     function verObs(id) { let el = document.getElementById(id); el.style.display = el.style.display === 'block' ? 'none' : 'block'; }
     
-    // --- LÓGICA DE TRASLAPE MANUAL ---
     function previsualizarTraslape(idNuevo, asignatura) {
         let cursoNuevo = BD_AGRUPADA.find(c => c.id_unico === idNuevo);
         let horarioActual = miHorario.filter(h => h.asignatura !== asignatura);
         let conflictos = obtenerChoques(cursoNuevo, horarioActual);
         
-        // Agregar a la lista de pendientes (no reemplaza, agrega)
-        // Evitar duplicados
         if(!materiasPendientes.some(p => p.curso.id_unico === idNuevo)) {
             materiasPendientes.push({
                 curso: cursoNuevo,
@@ -1202,22 +1482,14 @@
     }
 
     function confirmarTraslape(idUnicoConfirmar) {
-        registrarEstado(); // Undo
-        
+        registrarEstado();
         let pendiente = materiasPendientes.find(p => p.curso.id_unico === idUnicoConfirmar);
         if(!pendiente) return;
-
         let nuevo = pendiente.curso;
         let conflictoIds = pendiente.conflictos.map(c => c.id_unico);
-        
-        // Eliminar conflictos y la misma asignatura si ya estaba
         miHorario = miHorario.filter(c => !conflictoIds.includes(c.id_unico) && c.asignatura !== nuevo.asignatura);
-        
         miHorario.push(nuevo);
-        
-        // Remover de pendientes
         materiasPendientes = materiasPendientes.filter(p => p.curso.id_unico !== idUnicoConfirmar);
-        
         ordenarMiHorario(); 
         guardarEstado();
         actualizarTablaHorario();
@@ -1233,13 +1505,10 @@
     }
 
     function toggleSeleccionManual(id, asignatura) {
-        registrarEstado(); // Undo
-
-        // Si la materia estaba en pendientes, la quitamos
+        registrarEstado();
         if(materiasPendientes.some(p => p.curso.id_unico === id)) {
             materiasPendientes = materiasPendientes.filter(p => p.curso.id_unico !== id);
         }
-
         let yaEsta = miHorario.some(c => c.id_unico === id);
         if (yaEsta) {
             miHorario = miHorario.filter(c => c.id_unico !== id);
@@ -1294,10 +1563,29 @@
         tbody.innerHTML = '';
         let total = 0;
         document.getElementById('btn-limpiar-manual').style.display = miHorario.length ? 'inline-block' : 'none';
-        if(!miHorario.length) { tbody.innerHTML = '<tr><td colspan="12" class="text-center text-muted py-4">No has agregado materias aún.</td></tr>'; } 
-        else { miHorario.forEach((c, idx) => { total += c.creditos; tbody.innerHTML += generarFilaSIAE(c, idx); }); }
-        document.getElementById('creditos-badge').innerText = `${total} Créditos`;
-        // Si hay previsualización, renderizar de nuevo
+        if(!miHorario.length) { 
+            tbody.innerHTML = '<tr><td colspan="12" class="text-center text-muted py-4">No has agregado materias aún.</td></tr>'; 
+        } else { 
+            miHorario.forEach((c, idx) => { 
+                total += c.creditos; 
+                tbody.innerHTML += generarFilaSIAE(c, idx); 
+            }); 
+        }
+        let badge = document.getElementById('creditos-badge');
+        badge.innerText = `${total} Créditos`;
+        badge.className = 'badge me-3'; 
+        if (total === 0) {
+            badge.classList.add('bg-secondary');
+        } else if (total < 37) {
+            badge.classList.add('bg-warning', 'text-dark');
+            badge.innerText += " (Faltan Créditos)"; 
+        } else if (total > 41) {
+            badge.classList.add('bg-danger');
+            badge.innerText += " (Exceso de Créditos)";
+        } else {
+            badge.classList.add('bg-success');
+            badge.innerText += " (¡Perfecto!)";
+        }
         if(document.getElementById('switch-vista').checked) renderizarHorarioVisual();
     }
     
@@ -1314,7 +1602,7 @@
     }
     
     function borrar(idx) { 
-        registrarEstado(); // Undo
+        registrarEstado();
         let borrada = miHorario[idx]; 
         miHorario.splice(idx, 1); 
         guardarEstado(); 
@@ -1324,7 +1612,7 @@
     }
     function limpiarTodoManual() { 
         if(confirm("¿Borrar todo?")) { 
-            registrarEstado(); // Undo
+            registrarEstado();
             miHorario = []; 
             materiasPendientes=[]; 
             guardarEstado(); 
@@ -1334,8 +1622,6 @@
         } 
     }
     
-    // === FUNCIONES DE DESCARGA ===
-
     async function descargarPDF() {
         const { jsPDF } = window.jspdf;
         let isVisual = document.getElementById('switch-vista').checked;
@@ -1454,7 +1740,6 @@
         XLSX.writeFile(wb, "Horario_FacPsi_UNAM.xlsx");
     }
 
-    // === LÓGICA MODO AUTOMÁTICO ===
 
     function filtrarMateriasAuto() {
         let txt = document.getElementById('buscador-auto').value.toUpperCase();
@@ -1479,7 +1764,7 @@
                         materiaSeleccionadaAuto=nom; 
                         filtrarMateriasAuto(); 
                         cargarPanelGruposAuto(nom); 
-                        scrollToPanel('contenedor-panel-auto');
+                        // SIN SCROLL AUTOMÁTICO
                     };
                     lista.appendChild(item);
                 });
@@ -1488,7 +1773,7 @@
     }
 
     function limpiarPanelGruposAuto() {
-        document.getElementById('titulo-seleccion-auto').innerHTML = '<i class="bi bi-arrow-left-circle"></i> Selecciona candidatos';
+        document.getElementById('titulo-seleccion-auto').innerHTML = '<i class="bi bi-arrow-left-circle"></i> 2. Selecciona tus Profesores';
         document.getElementById('info-seleccion-auto').innerText = 'Esperando...';
         document.getElementById('contenedor-grupos-auto').innerHTML = '<div class="text-center text-muted py-5 w-100"><i class="bi bi-hand-index-thumb display-1 opacity-25"></i><p class="mt-3 lead">Selecciona una materia a la izquierda.</p></div>';
     }
@@ -1568,38 +1853,156 @@
     }
 
     async function generarCombinaciones() {
-        let resDiv = document.getElementById('resultados-auto'); resDiv.innerHTML = '<div class="text-center py-4"><div class="spinner-border text-primary"></div></div>';
-        await new Promise(r => setTimeout(r, 50));
-        let listas = Object.values(bolsa);
-        if(!listas.length) { resDiv.innerHTML = '<div class="alert alert-warning text-center small">Agrega materias primero.</div>'; return; }
+        let resDiv = document.getElementById('resultados-auto');
         
-        let cartesian = (...a) => a.reduce((a, b) => a.flatMap(d => b.map(e => [d, e].flat())));
-        let combs = listas.length === 1 ? listas[0].map(x => [x]) : cartesian(...listas);
-        if(combs.length > 20000) combs = combs.slice(0, 20000); 
+        resDiv.innerHTML = `
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary mb-2" role="status"></div>
+                <h6 class="fw-bold text-primary">Analizando combinaciones...</h6>
+                <p class="small text-muted" id="progress-text">Iniciando motor...</p>
+                <div class="progress w-50 mx-auto" style="height: 5px;">
+                    <div id="progress-bar-inner" class="progress-bar" role="progressbar" style="width: 0%"></div>
+                </div>
+                <button class="btn btn-sm btn-outline-danger mt-3" onclick="window.detenerGeneracion = true">Cancelar</button>
+            </div>`;
+        
+        window.detenerGeneracion = false;
+        await new Promise(r => setTimeout(r, 100));
 
-        RESULTADOS_GLOBALES = []; 
-        for(let comb of combs) {
-            if(!hayChoqueCombo(comb) && esCombinacionValida(comb)) {
-                let creds = comb.reduce((a,b) => a + b.creditos, 0);
-                let diasSet = new Set(comb.flatMap(c => c.sesiones.map(s => s.dia)));
-                let huecos = calcularHuecos(comb);
-                RESULTADOS_GLOBALES.push({ cursos: comb, creditos: creds, dias: diasSet.size, huecos: huecos });
-                if(RESULTADOS_GLOBALES.length >= 200) break;
+        try {
+            let nombresMaterias = Object.keys(bolsa);
+            let listas = Object.values(bolsa);
+
+            if (!listas.length) { throw new Error("Agrega materias primero."); }
+
+            for(let i=0; i<nombresMaterias.length; i++) {
+                if(!listas[i] || listas[i].length === 0) throw new Error(`La materia "${nombresMaterias[i]}" está en tu lista pero no tiene grupos seleccionados.`);
+            }
+
+            let totalPosibilidades = listas.reduce((acc, lista) => acc * lista.length, 1);
+            
+            if (totalPosibilidades > 2000000) {
+                if (!confirm(`Se han detectado ${totalPosibilidades.toLocaleString()} combinaciones posibles. Esto podría tardar. ¿Continuar?`)) {
+                    resDiv.innerHTML = '<div class="text-center py-4 text-muted">Cancelado por el usuario.</div>';
+                    return;
+                }
+            }
+
+            RESULTADOS_GLOBALES = [];
+            let indices = new Array(listas.length).fill(0);
+            let combinacionesProcesadas = 0;
+            let combinacionesValidas = 0;
+            let startTimestamp = Date.now();
+
+            while (true) {
+                if (window.detenerGeneracion) {
+                    resDiv.innerHTML = '<div class="alert alert-warning text-center">Cálculo detenido.</div>';
+                    return;
+                }
+
+                let comb = [];
+                for (let i = 0; i < listas.length; i++) {
+                    comb.push(listas[i][indices[i]]);
+                }
+
+                if (!hayChoqueCombo(comb) && esCombinacionValida(comb)) {
+                    let creds = comb.reduce((a, b) => a + b.creditos, 0);
+                    let diasSet = new Set(comb.flatMap(c => c.sesiones.map(s => s.dia)));
+                    let huecos = calcularHuecos(comb);
+                    
+                    RESULTADOS_GLOBALES.push({
+                        cursos: [...comb],
+                        creditos: creds,
+                        dias: diasSet.size,
+                        huecos: huecos
+                    });
+                    combinacionesValidas++;
+                }
+
+                combinacionesProcesadas++;
+
+                if (combinacionesProcesadas % 500 === 0) {
+                    let now = Date.now();
+                    if (now - startTimestamp > 100) {
+                        let porcentaje = Math.min(100, Math.round((combinacionesProcesadas / totalPosibilidades) * 100));
+                        let elTexto = document.getElementById('progress-text');
+                        let elBarra = document.getElementById('progress-bar-inner');
+                        
+                        if(elTexto) elTexto.innerText = `Analizando... (${combinacionesValidas} válidas)`;
+                        if(elBarra) elBarra.style.width = `${porcentaje}%`;
+                        
+                        await new Promise(r => setTimeout(r, 0)); 
+                        startTimestamp = now;
+                    }
+                }
+
+                if (combinacionesValidas >= 5000) break;
+
+                let nextIndex = listas.length - 1;
+                while (nextIndex >= 0) {
+                    indices[nextIndex]++;
+                    if (indices[nextIndex] < listas[nextIndex].length) {
+                        break;
+                    } else {
+                        indices[nextIndex] = 0;
+                        nextIndex--;
+                    }
+                }
+                if (nextIndex < 0) break; 
+            }
+
+            if (RESULTADOS_GLOBALES.length > 0) {
+                actualizarFiltrosUI();
+                document.getElementById('panel-filtros-resultados').style.display = 'block';
+                aplicarOrdenYFiltro();
+            } else {
+                ejecutarDetectiveDeConflictos(nombresMaterias, resDiv);
+            }
+        } catch (error) {
+            console.error(error);
+            resDiv.innerHTML = `<div class="alert alert-danger text-center"><i class="bi bi-exclamation-triangle-fill"></i> ${error.message}</div>`;
+        }
+    }
+
+    function ejecutarDetectiveDeConflictos(nombresMaterias, contenedor) {
+        document.getElementById('panel-filtros-resultados').style.display = 'none';
+        
+        let reporteHTML = `<div class="alert alert-danger shadow-sm"><h5 class="alert-heading fw-bold"><i class="bi bi-lightning-fill"></i> No existen horarios posibles</h5><p class="small mb-2">Ninguna combinación encaja.</p><hr><h6 class="fw-bold small text-uppercase">Diagnóstico:</h6><ul class="mb-0 small ps-3">`;
+
+        let conflictosEncontrados = 0;
+
+        for (let i = 0; i < nombresMaterias.length; i++) {
+            for (let j = i + 1; j < nombresMaterias.length; j++) {
+                let matA = nombresMaterias[i];
+                let matB = nombresMaterias[j];
+                let gruposA = bolsa[matA];
+                let gruposB = bolsa[matB];
+                let sonCompatibles = false;
+                
+                checkLoop:
+                for (let gA of gruposA) {
+                    for (let gB of gruposB) {
+                        if (!hayChoque(gA, [gB])) {
+                            sonCompatibles = true;
+                            break checkLoop;
+                        }
+                    }
+                }
+
+                if (!sonCompatibles) {
+                    conflictosEncontrados++;
+                    reporteHTML += `<li><strong>${matA}</strong> choca con <strong>${matB}</strong> en todas las opciones.</li>`;
+                }
             }
         }
-        
-        let todosProfes = [...new Set(RESULTADOS_GLOBALES.flatMap(r=>r.cursos.map(c=>c.profesor)))].sort();
-        let contenedorLista = document.getElementById('lista-profes-filtro-resultados');
-        contenedorLista.innerHTML = '';
-        todosProfes.forEach(p => {
-            let div = document.createElement('div');
-            div.className = 'form-check mb-1';
-            div.innerHTML = `<input class="form-check-input chk-filtro-profe" type="checkbox" value="${p}" id="chk-${p.replace(/\s/g,'-')}" onchange="aplicarOrdenYFiltro()"><label class="form-check-label small w-100 text-truncate" for="chk-${p.replace(/\s/g,'-')}">${p}</label>`;
-            contenedorLista.appendChild(div);
-        });
 
-        document.getElementById('panel-filtros-resultados').style.display = 'block';
-        aplicarOrdenYFiltro();
+        if (conflictosEncontrados === 0) {
+            reporteHTML += `<li>El conflicto es complejo (3 o más materias chocan entre sí).</li><li>Prueba reduciendo materias.</li>`;
+        } else {
+            reporteHTML += `<li class="mt-2 text-muted list-unstyled"><i>Sugerencia: Elimina una de las materias conflictivas.</i></li>`;
+        }
+        reporteHTML += `</ul></div>`;
+        contenedor.innerHTML = reporteHTML;
     }
     
     function filtrarListaProfesResultados(input) {
@@ -1666,7 +2069,6 @@
         let resDiv = document.getElementById('resultados-auto'); resDiv.innerHTML = '';
         document.getElementById('conteo-resultados').innerText = `${lista.length} opciones`;
         
-        // Mostrar botón recolorear si hay resultados
         document.getElementById('btn-recolor-auto').style.display = lista.length > 0 ? 'inline-block' : 'none';
 
         if(!lista.length) { resDiv.innerHTML = '<div class="alert alert-danger small text-center">No hay combinaciones con esos filtros.</div>'; return; }
@@ -1715,11 +2117,10 @@
 
     function transferirAManual(idx) {
         if(miHorario.length > 0) {
-            let confirmacion = confirm("⚠️ ADVERTENCIA: Al transferir esta opción, se borrará todo lo que tienes seleccionado actualmente en el 'Generador Manual'.\n\n¿Deseas continuar y sobrescribir tu horario manual?");
+            let confirmacion = confirm("ADVERTENCIA: Al transferir esta opción, se borrará todo lo que tienes seleccionado actualmente en el 'Generador Manual'.\n\n¿Deseas continuar y sobrescribir tu horario manual?");
             if(!confirmacion) return;
         }
         
-        // Guardar estado actual para Undo
         registrarEstado();
 
         miHorario = JSON.parse(JSON.stringify(RESULTADOS_MOSTRADOS[idx].cursos));
@@ -1803,11 +2204,9 @@
     }
 
     function renderizarBloquesEnGrid(cursos, suffix) {
-        // Ordenamos alfabéticamente para asignar colores consistentes
         let cursosOrdenados = [...cursos].sort((a,b) => a.asignatura.localeCompare(b.asignatura));
         
         cursosOrdenados.forEach((curso, i) => {
-            // Asignación secuencial de color con offset global
             let totalColores = PALETA_ORDENADA.length;
             let indexColor = (i + OFFSET_RECOLOR_AUTO) % totalColores;
             let color = PALETA_ORDENADA[indexColor];
@@ -1842,7 +2241,6 @@
                     
                     bloque.innerHTML = htmlContent;
 
-                    // Hover sincronizado en resultados automáticos también
                     bloque.onmouseenter = () => {
                          document.querySelectorAll(`.bloque-auto-${suffix}-${curso.id_unico}`).forEach(b => b.classList.add('bloque-resaltado'));
                     };
@@ -1856,6 +2254,51 @@
         });
     }
 
+    window.entrarAlWorkspace = function() {
+        let selectorInicio = document.getElementById('landing-selector');
+        let valor = selectorInicio.value;
+        
+        if(!valor) {
+            alert("Por favor, selecciona un semestre para continuar.");
+            return;
+        }
+
+        let selectorReal = document.getElementById('semestre-selector');
+        if(selectorReal) {
+            selectorReal.value = valor;
+            if(typeof cambiarSemestre === 'function') {
+                cambiarSemestre(true); 
+            }
+        }
+
+        let landing = document.getElementById('step-1-landing');
+        let appWrapper = document.getElementById('app-container-wrapper');
+
+        landing.classList.add('slide-up-exit');
+        
+        appWrapper.classList.add('app-loaded');
+        
+        document.body.classList.add('mode-workspace');
+
+        setTimeout(() => { 
+            landing.style.display = 'none'; 
+        }, 600);
+    };
+    function actualizarFiltrosUI() {
+        if(document.getElementById('sort-resultados')) 
+            document.getElementById('sort-resultados').value = 'dias';
+        
+        if(document.getElementById('filtro-turno')) 
+            document.getElementById('filtro-turno').value = '';
+
+        document.querySelectorAll('.chk-filtro-dia').forEach(c => c.checked = false);
+        let btnDia = document.getElementById('btn-filtro-dia');
+        if(btnDia) btnDia.innerText = 'Ninguno';
+
+        document.querySelectorAll('.chk-filtro-profe').forEach(c => c.checked = false);
+        let btnProf = document.getElementById('btn-filtro-profe');
+        if(btnProf) btnProf.innerText = 'Todos';
+    }
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
