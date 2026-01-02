@@ -6,6 +6,7 @@
 
     body {
         background-color: #f8f9fa;
+        /* Dark background to prevent white/blue flash */
         font-family: 'Segoe UI', system-ui, sans-serif;
         min-height: 100vh;
         display: flex;
@@ -20,6 +21,7 @@
         width: 100%;
         height: 100%;
         background: linear-gradient(135deg, #002B7A 0%, #00153d 100%);
+        /* Solid black loading field */
         z-index: 9999;
         display: flex;
         flex-direction: column;
@@ -581,6 +583,189 @@
         z-index: -1000;
         opacity: 0;
         pointer-events: none;
+    }
+
+    /* --- PREMIUM MANUAL TOOLBAR STYLES --- */
+    .toolbar-manual-container {
+        background: #ffffff;
+        border-bottom: 1px solid #edf2f7;
+        padding: 0.75rem 1.25rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        border-top-left-radius: 12px;
+        /* Smooth corners for the card */
+        border-top-right-radius: 12px;
+    }
+
+    .group-left,
+    .group-right {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .btn-tool {
+        border: none;
+        background: #f8f9fa;
+        color: #495057;
+        font-weight: 600;
+        font-size: 0.85rem;
+        padding: 8px 14px;
+        border-radius: 10px;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .btn-tool:hover {
+        background: #e9ecef;
+        color: #212529;
+        transform: translateY(-1px);
+    }
+
+    .btn-tool:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .btn-tool-primary {
+        background-color: var(--unam-azul);
+        color: white;
+        box-shadow: 0 2px 5px rgba(0, 43, 122, 0.2);
+    }
+
+    .btn-tool-primary:hover {
+        background-color: #001e54;
+        color: white;
+        box-shadow: 0 4px 10px rgba(0, 43, 122, 0.3);
+    }
+
+    .btn-tool-danger {
+        background-color: #fff5f5;
+        color: #e03131;
+    }
+
+    .btn-tool-danger:hover {
+        background-color: #ffe3e3;
+        color: #c92a2a;
+    }
+
+    /* Input del nombre del horario */
+    .input-tool-name {
+        background: #f8f9fa;
+        border: 2px solid transparent;
+        border-radius: 8px;
+        padding: 6px 12px;
+        font-weight: 700;
+        color: #343a40;
+        font-size: 0.85rem;
+        width: 180px;
+        transition: all 0.2s;
+    }
+
+    .input-tool-name:focus {
+        background: white;
+        border-color: var(--unam-azul);
+        color: var(--unam-azul);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(0, 43, 122, 0.1);
+    }
+
+    /* Dropdown de selección de horario */
+    .select-tool-sched {
+        border: none;
+        background: transparent;
+        font-weight: 800;
+        color: var(--unam-azul);
+        font-size: 0.95rem;
+        cursor: pointer;
+        padding-right: 20px;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23002B7A' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 0.1rem center;
+        background-size: 10px 10px;
+        appearance: none;
+    }
+
+    .select-tool-sched:focus {
+        outline: none;
+    }
+
+    /* Pill de Visual Mode */
+    .visual-pill {
+        background: #212529;
+        color: white;
+        border-radius: 20px;
+        padding: 6px 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        transition: transform 0.2s;
+        font-size: 0.75rem;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+    }
+
+    .visual-pill:hover {
+        transform: scale(1.03);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .visual-pill input {
+        cursor: pointer;
+    }
+
+    .separator-v {
+        width: 1px;
+        height: 24px;
+        background-color: #dee2e6;
+        margin: 0 5px;
+    }
+
+    /* Dropdown menu customization */
+    .dropdown-menu-tool {
+        border: none;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        border-radius: 12px;
+        overflow: hidden;
+        padding: 0;
+    }
+
+    .dropdown-item-tool {
+        padding: 10px 20px;
+        font-size: 0.85rem;
+        color: #495057;
+        font-weight: 600;
+        border-bottom: 1px solid #f1f3f5;
+        transition: background 0.2s;
+    }
+
+    .dropdown-item-tool:hover {
+        background: #f8f9fa;
+        color: var(--unam-azul);
+    }
+
+    .dropdown-item-tool:last-child {
+        border-bottom: none;
+    }
+
+    .dropdown-header-tool {
+        background: #f8f9fa;
+        color: #868e96;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 800;
+        padding: 8px 15px;
     }
 </style>
 <!DOCTYPE html>
@@ -1420,120 +1605,163 @@
                         </div>
 
                         <div class="card shadow-sm border-0 flex-grow-1" style="min-height: 400px;">
-                            <div
-                                class="card-header header-acciones bg-white d-flex justify-content-between align-items-center py-2 flex-wrap gap-2">
-                                <div class="d-flex align-items-center gap-2 flex-wrap">
-                                    <div class="input-group input-group-sm" style="width: auto;">
-                                        <select id="selector-horarios" class="form-select fw-bold"
-                                            style="max-width: 130px; color: #00695c; border-color: #00695c;"
-                                            onchange="cambiarHorarioActivo()"></select>
-
-                                        <button class="btn btn-outline-secondary"
-                                            style="color: #00695c; border-color: #00695c;" onclick="crearNuevoHorario()"
-                                            title="Crear nuevo horario">
-                                            <i class="bi bi-plus-lg"></i>
-                                        </button>
-                                    </div>
-                                    <div class="input-group input-group-sm" style="width: 200px;">
-                                        <input type="text" id="nombre-horario-actual"
-                                            class="form-control fw-bold text-success border-success" value="Mi Horario"
-                                            placeholder="Nombre...">
-                                        <button class="btn btn-success" onclick="guardarNombreHorario()"
-                                            title="Guardar nombre"><i class="bi bi-floppy"></i></button>
-                                    </div>
-                                    <button class="btn btn-sm btn-outline-danger" onclick="eliminarHorarioActual()"
-                                        title="Eliminar este horario"><i class="bi bi-trash"></i></button>
-
-                                    <div class="btn-group btn-group-sm ms-2">
-                                        <button class="btn btn-outline-secondary" id="btn-undo" onclick="undo()"
-                                            disabled title="Deshacer (Undo)">
-                                            <i class="bi bi-arrow-counterclockwise"></i>
-                                        </button>
-                                        <button class="btn btn-outline-secondary" id="btn-redo" onclick="redo()"
-                                            disabled title="Rehacer (Redo)">
-                                            <i class="bi bi-arrow-clockwise"></i>
-                                        </button>
+                            <div <div class="card-header toolbar-manual-container header-acciones">
+                                <!-- SECCIÓN IZQUIERDA: GESTIÓN DE HORARIOS -->
+                                <div class="group-left">
+                                    <div class="d-flex align-items-center bg-white rounded-pill px-2 border shadow-sm"
+                                        style="height: 38px;">
+                                        <select id="selector-horarios"
+                                            class="select-tool-sched border-0 bg-transparent ps-2 py-1"
+                                            style="max-width:140px;" onchange="cambiarHorarioActivo()"></select>
+                                        <div class="vr mx-1"></div>
+                                        <button class="btn btn-sm text-primary" onclick="crearNuevoHorario()"
+                                            title="Crear nuevo horario"><i class="bi bi-plus-lg"></i></button>
                                     </div>
 
-                                    <div class="visual-mode-container ms-3">
-                                        <div class="form-check form-switch d-flex align-items-center m-0">
+                                    <div class="d-flex align-items-center gap-1">
+                                        <input type="text" id="nombre-horario-actual" class="input-tool-name shadow-sm"
+                                            style="height: 38px;" value="Mi Horario" placeholder="Nombrar...">
+                                        <button class="btn-tool btn-tool-primary shadow-sm"
+                                            style="height: 38px; width: 38px; justify-content: center; padding: 0;"
+                                            onclick="guardarNombreHorario()" title="Guardar nombre"><i
+                                                class="bi bi-floppy"></i></button>
+                                        <button class="btn-tool btn-tool-danger shadow-sm"
+                                            style="height: 38px; width: 38px; justify-content: center; padding: 0;"
+                                            onclick="eliminarHorarioActual()" title="Eliminar este horario"><i
+                                                class="bi bi-trash"></i></button>
+                                    </div>
+                                </div>
+
+                                <!-- SECCIÓN CENTRAL: HERRAMIENTAS Y VISTA -->
+                                <div class="group-center d-flex align-items-center gap-2">
+                                    <div class="btn-group shadow-sm rounded-3">
+                                        <button class="btn btn-light border" id="btn-undo" onclick="undo()" disabled
+                                            title="Deshacer (Undo)"><i
+                                                class="bi bi-arrow-counterclockwise"></i></button>
+                                        <button class="btn btn-light border" id="btn-redo" onclick="redo()" disabled
+                                            title="Rehacer (Redo)"><i class="bi bi-arrow-clockwise"></i></button>
+                                    </div>
+
+                                    <div class="visual-pill shadow-sm"
+                                        onclick="document.getElementById('switch-vista').click()">
+                                        <div class="form-check form-switch m-0 d-flex align-items-center">
                                             <input class="form-check-input" type="checkbox" id="switch-vista"
-                                                onchange="toggleVistaVisual()">
-                                            <label class="form-check-label ms-2" for="switch-vista">MODO VISUAL</label>
+                                                onclick="event.stopPropagation()" onchange="toggleVistaVisual()">
+                                            <span class="ms-2"> MODO VISUAL</span>
                                         </div>
                                     </div>
 
-                                    <div class="dropdown ms-1">
-                                        <button class="btn btn-sm btn-link text-secondary p-0 border-0" type="button"
-                                            data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="bi bi-gear-fill"></i>
-                                        </button>
-                                        <ul class="dropdown-menu shadow p-2" onclick="event.stopPropagation()">
+                                    <button id="btn-recolorear" class="btn-tool bg-white shadow-sm border"
+                                        style="display:none;" onclick="recolorearInteligente()"
+                                        title="Reasignar colores (Manual)"><i
+                                            class="bi bi-palette text-primary"></i></button>
+
+                                    <div class="dropdown">
+                                        <button class="btn-tool bg-white shadow-sm border" type="button"
+                                            data-bs-toggle="dropdown" aria-expanded="false"><i
+                                                class="bi bi-gear-fill text-secondary"></i></button>
+                                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-tool shadow p-0"
+                                            onclick="event.stopPropagation()">
                                             <li>
-                                                <h6 class="dropdown-header small">Mostrar en visual:</h6>
+                                                <h6 class="dropdown-header-tool">Mostrar en visual</h6>
                                             </li>
                                             <li>
-                                                <div class="form-check small"><input class="form-check-input vis-toggle"
-                                                        type="checkbox" id="chk-prof" checked
-                                                        onchange="actualizarConfigVisual()"><label
-                                                        class="form-check-label" for="chk-prof">Profesor</label></div>
+                                                <div class="dropdown-item-tool">
+                                                    <div class="form-check small m-0"><input
+                                                            class="form-check-input vis-toggle" type="checkbox"
+                                                            id="chk-prof" checked
+                                                            onchange="actualizarConfigVisual()"><label
+                                                            class="form-check-label w-100"
+                                                            for="chk-prof">Profesor</label></div>
+                                                </div>
                                             </li>
                                             <li>
-                                                <div class="form-check small"><input class="form-check-input vis-toggle"
-                                                        type="checkbox" id="chk-grupo" checked
-                                                        onchange="actualizarConfigVisual()"><label
-                                                        class="form-check-label" for="chk-grupo">Grupo</label></div>
+                                                <div class="dropdown-item-tool">
+                                                    <div class="form-check small m-0"><input
+                                                            class="form-check-input vis-toggle" type="checkbox"
+                                                            id="chk-grupo" checked
+                                                            onchange="actualizarConfigVisual()"><label
+                                                            class="form-check-label w-100" for="chk-grupo">Grupo</label>
+                                                    </div>
+                                                </div>
                                             </li>
                                             <li>
-                                                <div class="form-check small"><input class="form-check-input vis-toggle"
-                                                        type="checkbox" id="chk-horas" checked
-                                                        onchange="actualizarConfigVisual()"><label
-                                                        class="form-check-label" for="chk-horas">Horario</label></div>
+                                                <div class="dropdown-item-tool">
+                                                    <div class="form-check small m-0"><input
+                                                            class="form-check-input vis-toggle" type="checkbox"
+                                                            id="chk-horas" checked
+                                                            onchange="actualizarConfigVisual()"><label
+                                                            class="form-check-label w-100"
+                                                            for="chk-horas">Horario</label></div>
+                                                </div>
                                             </li>
                                         </ul>
                                     </div>
-                                    <button id="btn-recolorear" class="btn btn-sm btn-outline-primary ms-1"
-                                        style="display:none;" onclick="recolorearInteligente()"
-                                        title="Reasignar colores (Manual)">
-                                        <i class="bi bi-palette"></i>
-                                    </button>
                                 </div>
 
-                                <div class="d-flex align-items-center mt-1 mt-md-0">
-                                    <select id="sort-manual" class="form-select form-select-sm border-primary me-2"
-                                        style="width: auto; font-size: 0.75rem; font-weight: bold;"
-                                        onchange="ordenarMiHorario()">
+                                <!-- SECCIÓN DERECHA: ORDEN Y EXPORT -->
+                                <div class="group-right d-flex align-items-center gap-2">
+                                    <!-- Hidden select for compatibility -->
+                                    <select id="sort-manual" style="display:none;">
                                         <option value="materia" selected>Materia</option>
-                                        <option value="profesor">Profesor (A-Z)</option>
+                                        <option value="profesor">Profesor</option>
                                         <option value="grupo">Grupo</option>
-                                        <option value="horas">Duración Total</option>
-                                        <option value="cronologico">Orden Cronológico</option>
+                                        <option value="horas">Duración</option>
+                                        <option value="cronologico">Crono</option>
                                     </select>
 
-                                    <span id="creditos-badge" class="badge bg-secondary me-3">0 Créditos</span>
+                                    <div class="dropdown">
+                                        <button
+                                            class="btn btn-sm btn-light border shadow-sm dropdown-toggle fw-bold text-secondary"
+                                            type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                                            style="border-radius: 20px; padding-left: 15px; padding-right: 15px;">
+                                            <i class="bi bi-sort-down me-1"></i> <span
+                                                id="btn-sort-label">Materia</span>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3 mt-1">
+                                            <li><button class="dropdown-item small fw-bold py-2"
+                                                    onclick="ordenarMiHorario('materia')">Materia</button></li>
+                                            <li><button class="dropdown-item small fw-bold py-2"
+                                                    onclick="ordenarMiHorario('profesor')">Profesor (A-Z)</button></li>
+                                            <li><button class="dropdown-item small fw-bold py-2"
+                                                    onclick="ordenarMiHorario('grupo')">Grupo</button></li>
+                                            <li><button class="dropdown-item small fw-bold py-2"
+                                                    onclick="ordenarMiHorario('horas')">Duración Total</button></li>
+                                            <li><button class="dropdown-item small fw-bold py-2"
+                                                    onclick="ordenarMiHorario('cronologico')">Orden Cronológico</button>
+                                            </li>
+                                        </ul>
+                                    </div>
 
-                                    <div class="btn-group me-2">
-                                        <button type="button" class="btn btn-sm btn-success dropdown-toggle"
+                                    <span id="creditos-badge"
+                                        class="badge rounded-pill bg-light text-dark border shadow-sm py-2 px-3">0
+                                        Créditos</span>
+
+                                    <div class="btn-group">
+                                        <button type="button"
+                                            class="btn btn-success btn-sm fw-bold shadow-sm dropdown-toggle rounded-pill px-3"
                                             data-bs-toggle="dropdown" aria-expanded="false">
                                             <i class="bi bi-download"></i> Descargar
                                         </button>
-                                        <ul class="dropdown-menu dropdown-menu-end shadow">
-                                            <li><button class="dropdown-item small" onclick="descargarPDF()"><i
-                                                        class="bi bi-file-earmark-pdf text-danger"></i> PDF
-                                                    (Hoja)</button></li>
-                                            <li><button class="dropdown-item small" onclick="descargarImagen()"><i
-                                                        class="bi bi-file-image text-primary"></i> Imagen (PNG)</button>
+                                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3 mt-1">
+                                            <li><button class="dropdown-item small py-2" onclick="descargarPDF()"><i
+                                                        class="bi bi-file-earmark-pdf text-danger me-2"></i>PDF</button>
                                             </li>
-                                            <li><button class="dropdown-item small" onclick="descargarExcel()"><i
-                                                        class="bi bi-file-earmark-excel text-success"></i> Excel (.xlsx
-                                                    Visual)</button></li>
-                                            <li><button class="dropdown-item small" onclick="descargarCSV()"><i
-                                                        class="bi bi-file-text"></i> CSV (Datos)</button></li>
+                                            <li><button class="dropdown-item small py-2" onclick="descargarImagen()"><i
+                                                        class="bi bi-file-image text-primary me-2"></i>Imagen
+                                                    PNG</button></li>
+                                            <li><button class="dropdown-item small py-2" onclick="descargarExcel()"><i
+                                                        class="bi bi-file-earmark-excel text-success me-2"></i>Excel</button>
+                                            </li>
+                                            <li><button class="dropdown-item small py-2" onclick="descargarCSV()"><i
+                                                        class="bi bi-file-text me-2"></i>CSV</button></li>
                                         </ul>
                                     </div>
 
-                                    <button class="btn btn-sm btn-outline-danger" id="btn-limpiar-manual"
-                                        onclick="limpiarTodoManual()" style="display:none;">Limpiar</button>
+                                    <button class="btn btn-sm btn-outline-danger border-0 rounded-circle shadow-sm"
+                                        id="btn-limpiar-manual" onclick="limpiarTodoManual()"
+                                        style="display:none; width: 32px; height: 32px;" title="Borrar todo"><i
+                                            class="bi bi-trash"></i></button>
                                 </div>
                             </div>
                             <div class="card-body p-0 d-flex flex-column" style="overflow: hidden;">
@@ -1786,11 +2014,6 @@
                                     <span id="conteo-resultados" class="badge bg-light text-dark border ms-2">0
                                         opciones</span>
                                 </div>
-                                <button class="btn btn-sm btn-outline-secondary" id="btn-recolor-auto"
-                                    onclick="recolorearAuto()"
-                                    style="display:none; color: #6a1b9a; border-color: #6a1b9a;" title="Cambiar paleta">
-                                    <i class="bi bi-palette"></i> Recolorear
-                                </button>
                             </div>
 
                             <div id="panel-filtros-resultados" class="panel-filtros p-2" style="display:none;">
@@ -1963,6 +2186,10 @@
                                         <span class="badge bg-danger border border-danger">Máximo 41 Créditos</span>
                                         <span class="text-muted">Tope del sistema (+1 recursamiento).</span>
                                     </div>
+                                    <p class="mt-2 text-muted fst-italic mb-0" style="font-size: 0.75rem;">(Los créditos
+                                        requeridos para 1.º a 4.º semestre son distintos a los establecidos para 5.º a
+                                        8.º semestre. El sistema identifica automáticamente el rango y aplica los
+                                        créditos correspondientes.)</p>
                                 </li>
 
                                 <li class="list-group-item px-4 py-3">
@@ -2018,20 +2245,40 @@
 
             <div id="capture-container"></div>
             <script>
-                let BD_CRUDA = [], BD_AGRUPADA = [], miHorario = [], bolsa = {}, materiaSeleccionadaActual = null, materiaSeleccionadaAuto = null;
-                let MAPA_COLORES_ASIGNADOS = {};
-                let OFFSET_RECOLOR = 0;
-                let OFFSET_RECOLOR_AUTO = 0;
-                let RESULTADOS_GLOBALES = [];
-                let RESULTADOS_MOSTRADOS = [];
-                let historial = [];
-                let futuro = [];
-                let materiasPendientes = [];
-                let configVisual = { prof: true, grupo: true, horas: true };
-                let horariosGuardados = {};
+                // ==========================================
+                // 1. CONSTANTES Y CONFIGURACIÓN GLOBAL
+                // ==========================================
+
+                // --- Bases de Datos ---
+                let BD_CRUDA = [];      // Datos tal cual llegan del JSON
+                let BD_AGRUPADA = [];   // Datos procesados y limpios con clave y estructura unificada
+
+                // --- Estado del Usuario (Modo Manual) ---
+                let miHorario = [];     // Lista de cursos seleccionados actualmente
+                let historial = [];     // Pila para Undo
+                let futuro = [];        // Pila para Redo
+                let materiasPendientes = []; // Materias en previsualización (hover/condicionales)
+                let materiaSeleccionadaActual = null; // Materia activa en el panel izquierdo (Manual)
+
+                // --- Estado del Modo Explorador (Automático) ---
+                let bolsa = {};         // Materias candidatas seleccionadas { "Calculo": [grupo1, grupo2] }
+                let materiaSeleccionadaAuto = null; // Materia activa en el panel izquierdo (Auto)
+                let RESULTADOS_GLOBALES = [];    // Todas las combinaciones generadas
+                let RESULTADOS_MOSTRADOS = [];   // Combinaciones filtradas que se muestran
+                let OFFSET_MOSTRADOS = 0;        // Paginación de resultados visualizados
+                const BATCH_SIZE = 50;           // Cantidad de resultados por página
+
+                // --- Configuración Visual y Sistema ---
+                let configVisual = { prof: true, grupo: true, horas: true }; // Que mostrar en los bloques visuales
+                let MAPA_COLORES_ASIGNADOS = {}; // Cache de colores por ID de materia
+                let OFFSET_RECOLOR = 0;          // Desplazamiento de colores (Manual)
+                let OFFSET_RECOLOR_AUTO = 0;     // Desplazamiento de colores (Auto)
+                let horariosGuardados = {};      // Persistencia de múltiples horarios
                 let activeScheduleId = "default";
 
                 const DB_FILE = 'Horarios_Completo_UNAM.json';
+
+                // Paleta de colores pastel para los bloques
                 const PALETA_ENTERA = [
                     '#FFF9C4', '#F5F5DC', '#E3F2FD', '#F3E5F5', '#E0F2F1', '#FFF3E0', '#FBE9E7', '#FAFAFA',
                     '#ECEFF1', '#F9FBE7', '#FFF4F0', '#FFF4DC', '#F1F3FF', '#FFECF0', '#DCF2DD', '#D0F3CB',
@@ -2039,14 +2286,28 @@
                     '#D2DADD', '#FFFAC7', '#B0E0E0', '#B1CAFF', '#B7DAFF', '#FEDBD7', '#FFCCEA', '#FBC6F0',
                     '#FFE2C8', '#99DAFF', '#FFA79F', '#82E9E6', '#C3ADFF', '#FFC7BA'
                 ];
-                let PALETA_ORDENADA = [];
+                let PALETA_ORDENADA = []; // Se llena onload ordenando por luminancia
 
+                // ==========================================
+                // 2. UTILIDADES Y HELPERS
+                // ==========================================
+
+                /** Calcula la luminancia de un color Hex para ordenar la paleta */
                 function getLuminance(hex) { let c = hex.substring(1); let rgb = parseInt(c, 16); let r = (rgb >> 16) & 0xff; let g = (rgb >> 8) & 0xff; let b = (rgb >> 0) & 0xff; return 0.2126 * r + 0.7152 * g + 0.0722 * b; }
+
+                /** Convierte hora "HH:MM" a minutos desde las 00:00 */
                 function convertirMinutos(horaStr) { if (!horaStr || typeof horaStr !== 'string') return 0; const [h, m] = horaStr.split(':').map(Number); return (h * 60) + m; }
+
+                /** Convierte minutos a formato "HH:MM" */
                 function minutosAHora(minutos) { let h = Math.floor(minutos / 60); let m = minutos % 60; return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`; }
+
+                /** Asigna un color fijo a una materia basado en su ID si no tiene uno */
                 function asignarColorFijo(id_unico) { if (MAPA_COLORES_ASIGNADOS[id_unico]) return; let count = Object.keys(MAPA_COLORES_ASIGNADOS).length; let color = PALETA_ORDENADA[count % PALETA_ORDENADA.length]; MAPA_COLORES_ASIGNADOS[id_unico] = color; }
 
-                // --- UNDO/REDO ---
+                // ==========================================
+                // 3. GESTIÓN DEL ESTADO (UNDO/REDO)
+                // ==========================================
+
                 function registrarEstado() {
                     historial.push(JSON.parse(JSON.stringify(miHorario)));
                     futuro = [];
@@ -2085,13 +2346,48 @@
                     filtrarMaterias();
                 }
 
-                function recolorearInteligente() { OFFSET_RECOLOR++; let materiasOrdenadas = [...miHorario].sort((a, b) => { if (a.creditos !== b.creditos) return a.creditos - b.creditos; return a.asignatura.localeCompare(b.asignatura); }); let totalMaterias = materiasOrdenadas.length; let totalColores = PALETA_ORDENADA.length; if (totalMaterias > 0) { let step = totalColores / totalMaterias; materiasOrdenadas.forEach((mat, i) => { let baseIndex = Math.floor(i * step); let nextIndex = Math.floor((i + 1) * step); let sectionSize = Math.max(1, nextIndex - baseIndex); let indexWithin = OFFSET_RECOLOR % sectionSize; let finalIndex = baseIndex + indexWithin; if (finalIndex >= totalColores) finalIndex = totalColores - 1; MAPA_COLORES_ASIGNADOS[mat.id_unico] = PALETA_ORDENADA[finalIndex]; }); } guardarEstado(); renderizarHorarioVisual(); }
+                // ==========================================
+                // 4. LÓGICA DE COLORES Y CHOQUES
+                // ==========================================
 
-                function recolorearAuto() {
-                    OFFSET_RECOLOR_AUTO++;
-                    dibujarResultados(RESULTADOS_MOSTRADOS);
+                /** Cambia los colores de las materias del Modo Manual cíclicamente */
+                function recolorearInteligente() {
+                    OFFSET_RECOLOR++;
+                    let materiasOrdenadas = [...miHorario].sort((a, b) => { if (a.creditos !== b.creditos) return a.creditos - b.creditos; return a.asignatura.localeCompare(b.asignatura); });
+                    let totalMaterias = materiasOrdenadas.length;
+                    let totalColores = PALETA_ORDENADA.length;
+                    if (totalMaterias > 0) {
+                        let step = totalColores / totalMaterias;
+                        materiasOrdenadas.forEach((mat, i) => {
+                            let baseIndex = Math.floor(i * step);
+                            let nextIndex = Math.floor((i + 1) * step);
+                            let sectionSize = Math.max(1, nextIndex - baseIndex);
+                            let indexWithin = OFFSET_RECOLOR % sectionSize;
+                            let finalIndex = baseIndex + indexWithin;
+                            if (finalIndex >= totalColores) finalIndex = totalColores - 1;
+                            MAPA_COLORES_ASIGNADOS[mat.id_unico] = PALETA_ORDENADA[finalIndex];
+                        });
+                    }
+                    guardarEstado();
+                    renderizarHorarioVisual();
                 }
 
+                /** Cambia los colores de los Resultados Automáticos */
+                function recolorearAuto() {
+                    OFFSET_RECOLOR_AUTO++;
+                    RESULTADOS_MOSTRADOS.forEach((res, i) => {
+                        let switchVis = document.getElementById(`switch-auto-${i}`);
+                        if (switchVis && switchVis.checked) {
+                            let visualDiv = document.getElementById(`res-visual-${i}`);
+                            if (visualDiv) {
+                                visualDiv.innerHTML = generarHTMLGridVisual(`auto-${i}`);
+                                renderizarBloquesEnGrid(res.cursos, `auto-${i}`);
+                            }
+                        }
+                    });
+                }
+
+                /** Detecta conflictos de horario entre un curso 'c1' y una lista de cursos */
                 function obtenerChoques(c1, lista) {
                     let conflictos = [];
                     if (!c1 || !lista) return conflictos;
@@ -2113,6 +2409,8 @@
                 }
 
                 function hayChoque(c1, lista) { return obtenerChoques(c1, lista).length > 0; }
+
+                /** Verifica si hay algún choque interno en una lista de cursos (para el generador) */
                 function hayChoqueCombo(lista) { for (let i = 0; i < lista.length; i++) { for (let j = i + 1; j < lista.length; j++) { if (hayChoque(lista[i], [lista[j]])) return true; } } return false; }
 
                 function actualizarConfigVisual() {
@@ -2131,10 +2429,16 @@
                     }
                 }
 
+                // ==========================================
+                // 5. INICIALIZACIÓN Y CARGA DE DATOS
+                // ==========================================
+
                 // Se eliminó toggleFijarPanel por petición del usuario
 
                 window.onload = function () {
+                    // Ordenar paleta por brillo para contraste
                     PALETA_ORDENADA = [...PALETA_ENTERA].sort((a, b) => getLuminance(b) - getLuminance(a));
+
                     fetch(DB_FILE)
                         .then(res => { if (!res.ok) throw new Error("Error JSON"); return res.json(); })
                         .then(data => {
@@ -2142,12 +2446,20 @@
                             procesarDatosCrudos();
                             crearGridVisualVacia();
                             cargarEstado();
+                            // Restaurar semestre si estaba seleccionado
                             let semSelect = document.getElementById('semestre-selector');
                             if (semSelect.value) cambiarSemestre(false);
                         })
                         .catch(err => { console.error(err); alert("Error cargando datos: " + err.message); });
                 };
 
+                /** 
+                 * Procesa el JSON crudo a objetos utilizables.
+                 * - Genera ID único si no existe
+                 * - Normaliza campos
+                 * - Agrupa sesiones
+                 * - EXTRAE LA CLAVE (Nuevo Recquerimiento)
+                 */
                 function procesarDatosCrudos() {
                     let temp = {};
                     BD_CRUDA.forEach(fila => {
@@ -2157,7 +2469,10 @@
                         let gpo = (fila.grupo || "0").toString();
                         let area = (fila.area || "GENERAL").toString().trim();
                         if (area === "") area = "GENERAL";
+
+                        // Clave única para agrupar sesiones del mismo grupo
                         let key = `${sem}-${asig}-${gpo}`;
+
                         if (!temp[key]) {
                             temp[key] = {
                                 id_unico: fila.id_unico || Math.random(),
@@ -2167,13 +2482,16 @@
                                 grupo: gpo,
                                 creditos: parseInt(fila.creditos || 0),
                                 observaciones: fila.observaciones || "",
+                                clave: fila.clave || "", // INTEGRACIÓN DE CLAVE
                                 area: area,
                                 sesiones: []
                             };
                         }
+
                         let d = fila.dia || "POR ASIGNAR";
                         let i = fila.hora_inicio || "00:00";
                         let f = fila.hora_fin || "00:00";
+
                         if (d !== "POR ASIGNAR" && i !== "00:00") {
                             temp[key].sesiones.push({
                                 dia: d, inicio: i, fin: f,
@@ -2184,6 +2502,10 @@
                     });
                     BD_AGRUPADA = Object.values(temp);
                 }
+
+                // ==========================================
+                // 6. PERSISTENCIA Y GESTIÓN DE HORARIOS
+                // ==========================================
 
                 function guardarEstado() {
                     horariosGuardados[activeScheduleId].cursos = miHorario;
@@ -2201,16 +2523,20 @@
                     } else {
                         horariosGuardados = { "default": { nombre: "Mi Horario 1", cursos: [] } };
                     }
+
                     let savedId = localStorage.getItem('unam_active_id_v3');
                     if (savedId && horariosGuardados[savedId]) {
                         activeScheduleId = savedId;
                     } else {
+                        // Fallback si el ID guardado no existe
                         activeScheduleId = Object.keys(horariosGuardados)[0];
                     }
+
                     let b = localStorage.getItem('unam_b_v3');
                     let c = localStorage.getItem('unam_colors_v3');
                     if (b) bolsa = JSON.parse(b);
                     if (c) MAPA_COLORES_ASIGNADOS = JSON.parse(c);
+
                     miHorario = horariosGuardados[activeScheduleId].cursos || [];
 
                     historial = [];
@@ -2240,8 +2566,11 @@
                     miHorario = horariosGuardados[activeScheduleId].cursos || [];
                     localStorage.setItem('unam_active_id_v3', activeScheduleId);
                     document.getElementById('nombre-horario-actual').value = horariosGuardados[activeScheduleId].nombre;
+
+                    // Resetear estados temporales
                     materiasPendientes = [];
                     historial = []; futuro = []; actualizarBotonesUndo();
+
                     actualizarTablaHorario();
                     renderizarHorarioVisual();
                     materiaSeleccionadaActual = null;
@@ -2255,8 +2584,10 @@
                     horariosGuardados[newId] = { nombre: `Nuevo Horario ${count}`, cursos: [] };
                     activeScheduleId = newId;
                     miHorario = [];
+
                     materiasPendientes = [];
                     historial = []; futuro = []; actualizarBotonesUndo();
+
                     guardarEstado();
                     actualizarUIHorarios();
                     actualizarTablaHorario();
@@ -2277,11 +2608,14 @@
                 function eliminarHorarioActual() {
                     if (Object.keys(horariosGuardados).length <= 1) return alert("Debes tener al menos un horario.");
                     if (!confirm(`¿Eliminar "${horariosGuardados[activeScheduleId].nombre}" permanentemente?`)) return;
+
                     delete horariosGuardados[activeScheduleId];
                     activeScheduleId = Object.keys(horariosGuardados)[0];
                     miHorario = horariosGuardados[activeScheduleId].cursos;
+
                     materiasPendientes = [];
                     historial = []; futuro = []; actualizarBotonesUndo();
+
                     guardarEstado();
                     actualizarUIHorarios();
                     actualizarTablaHorario();
@@ -2290,16 +2624,45 @@
 
                 function mostrarToast() { document.getElementById('toast-guardado').style.display = 'block'; setTimeout(() => document.getElementById('toast-guardado').style.display = 'none', 1500); }
 
+                // ==========================================
+                // 7. INTERFAZ: VISUALIZACIÓN Y HELPERS
+                // ==========================================
+
+                function mostrarToast() { document.getElementById('toast-guardado').style.display = 'block'; setTimeout(() => document.getElementById('toast-guardado').style.display = 'none', 1500); }
+
                 function toggleVistaVisual() {
                     let isVisual = document.getElementById('switch-vista').checked;
                     document.getElementById('vista-lista-container').style.display = isVisual ? 'none' : 'block';
                     document.getElementById('vista-visual-container').style.display = isVisual ? 'block' : 'none';
                     document.getElementById('btn-recolorear').style.display = isVisual ? 'inline-block' : 'none';
-                    document.getElementById('sort-manual').style.display = isVisual ? 'none' : 'inline-block';
+
                     if (isVisual) renderizarHorarioVisual();
                 }
 
-                function crearGridVisualVacia() { let tbody = document.getElementById('grid-horario-visual'); tbody.innerHTML = ''; let startMin = 7 * 60; let endMin = 21 * 60; for (let m = startMin; m < endMin; m += 30) { let tr = document.createElement('tr'); let horaStr = minutosAHora(m); let idHora = m; let tdHora = document.createElement('td'); tdHora.className = 'hora-col'; tdHora.innerText = horaStr; tr.appendChild(tdHora);['LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO'].forEach(dia => { let td = document.createElement('td'); td.id = `grid-${dia}-${idHora}`; td.dataset.dia = dia; td.dataset.min = idHora; tr.appendChild(td); }); tbody.appendChild(tr); } }
+                /** Genera la estructura HTML vacía del horario gráfico */
+                function crearGridVisualVacia() {
+                    let tbody = document.getElementById('grid-horario-visual');
+                    tbody.innerHTML = '';
+                    let startMin = 7 * 60;
+                    let endMin = 21 * 60;
+                    for (let m = startMin; m < endMin; m += 30) {
+                        let tr = document.createElement('tr');
+                        let horaStr = minutosAHora(m);
+                        let idHora = m;
+                        let tdHora = document.createElement('td');
+                        tdHora.className = 'hora-col';
+                        tdHora.innerText = horaStr;
+                        tr.appendChild(tdHora);
+                        ['LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO'].forEach(dia => {
+                            let td = document.createElement('td');
+                            td.id = `grid-${dia}-${idHora}`;
+                            td.dataset.dia = dia;
+                            td.dataset.min = idHora;
+                            tr.appendChild(td);
+                        });
+                        tbody.appendChild(tr);
+                    }
+                }
 
                 function resaltarMateria(idUnico) {
                     let bloques = document.querySelectorAll(`.bloque-${idUnico}`);
@@ -2324,6 +2687,7 @@
                     });
                 }
 
+                /** Inserta un bloque visual en el grid */
                 function insertarBloque(curso, color, esTraslape) {
                     let horasStr = curso.sesiones.map(s => `${s.dia.substr(0, 3)} ${s.inicio}-${s.fin}`).join('\n');
                     curso.sesiones.forEach(sesion => {
@@ -2356,7 +2720,8 @@
                             }
 
                             let htmlContent = `<div class="materia-nombre">${curso.asignatura}</div>`;
-                            htmlContent += `<div class="materia-grupo">Gpo: ${curso.grupo}</div>`;
+                            // CLAVE INTEGRADA
+                            htmlContent += `<div class="materia-grupo">Gpo: ${curso.grupo} <span style="font-weight:normal; opacity:0.8;">| Clave: ${curso.clave}</span></div>`;
                             htmlContent += `<div class="materia-profe">${curso.profesor}</div>`;
                             htmlContent += `<div class="materia-horas">${horasStr}</div>`;
 
@@ -2370,7 +2735,22 @@
                     });
                 }
 
-                function mostrarDetallesMateria(id) { let curso = miHorario.find(c => c.id_unico === id); if (!curso) return; document.getElementById('tituloMateriaModal').innerText = curso.asignatura; document.getElementById('profeMateriaModal').innerText = curso.profesor || "Profesor no asignado"; let obs = curso.observaciones ? curso.observaciones : "Sin observaciones registradas para este grupo."; document.getElementById('obsMateriaModal').innerText = obs; let btnEliminar = document.getElementById('btnEliminarDesdeModal'); btnEliminar.onclick = () => eliminarDesdeModal(id); let modal = new bootstrap.Modal(document.getElementById('modalDetallesMateria')); modal.show(); }
+                // ==========================================
+                // 8. INTERACCIONES MODALES
+                // ==========================================
+
+                function mostrarDetallesMateria(id) {
+                    let curso = miHorario.find(c => c.id_unico === id);
+                    if (!curso) return;
+                    document.getElementById('tituloMateriaModal').innerText = curso.asignatura;
+                    document.getElementById('profeMateriaModal').innerText = curso.profesor || "Profesor no asignado";
+                    let obs = curso.observaciones ? curso.observaciones : "Sin observaciones registradas para este grupo.";
+                    document.getElementById('obsMateriaModal').innerText = obs;
+                    let btnEliminar = document.getElementById('btnEliminarDesdeModal');
+                    btnEliminar.onclick = () => eliminarDesdeModal(id);
+                    let modal = new bootstrap.Modal(document.getElementById('modalDetallesMateria'));
+                    modal.show();
+                }
 
                 function eliminarDesdeModal(id) {
                     if (!confirm("¿Estás seguro de eliminar esta materia?")) return;
@@ -2390,6 +2770,10 @@
                     }
                 }
 
+                // ==========================================
+                // 9. LÓGICA DE FILTRADO Y NAVEGACIÓN
+                // ==========================================
+
                 function obtenerMateriasActivas() {
                     const selector = document.getElementById('semestre-selector');
                     const valor = selector.value;
@@ -2406,7 +2790,8 @@
                         });
                     } else {
                         const sem = parseInt(valor);
-                        return BD_AGRUPADA.filter(c => c.semestre === sem);
+                        // Mostrar materias del semestre seleccionado, o "PRINCIPIOS..." si estamos en 6to (ya que es de 8vo pero se abre a 6to)
+                        return BD_AGRUPADA.filter(c => c.semestre === sem || (c.asignatura === "PRINCIPIOS DE SUSTENTABILIDAD" && sem === 6));
                     }
                 }
 
@@ -2472,6 +2857,10 @@
                         vistaAuto.style.display = (m === 'auto') ? 'block' : 'none';
                     }
                 }
+
+                // ==========================================
+                // 10. MODO MANUAL: SELECCIÓN Y PANELES
+                // ==========================================
 
                 function filtrarMaterias() {
                     let txt = document.getElementById('buscador').value.toUpperCase();
@@ -2628,7 +3017,7 @@
                         }
 
                         let col = document.createElement('div'); col.className = 'col-auto'; col.style.width = '300px'; col.style.flexShrink = '0';
-                        col.innerHTML = `<div class="grupo-card p-3 d-flex flex-column ${claseEstado}" onclick="${clickEvent}"><div class="d-flex justify-content-between mb-2"><span class="badge bg-primary">Gpo ${c.grupo}</span><span class="text-muted small">${c.creditos} Cr</span></div><h6 class="card-title text-primary small text-uppercase fw-bold mb-2" style="min-height:2.5em;">${c.profesor}</h6><div class="small text-muted flex-grow-1 border-top pt-2">${horario}</div> ${obsBtn} ${obsBox} ${botonAccion}</div>`;
+                        col.innerHTML = `<div class="grupo-card p-3 d-flex flex-column ${claseEstado}" onclick="${clickEvent}"><div class="d-flex justify-content-between mb-2"><span class="badge bg-primary">Gpo ${c.grupo}</span><span class="text-muted small">${c.creditos} Cr</span></div><div class="mb-1 text-center"><span class="badge bg-light text-dark border">Clave: ${c.clave}</span></div><h6 class="card-title text-primary small text-uppercase fw-bold mb-2" style="min-height:2.5em;">${c.profesor}</h6><div class="small text-muted flex-grow-1 border-top pt-2">${horario}</div> ${obsBtn} ${obsBox} ${botonAccion}</div>`;
                         contenedor.appendChild(col);
                     });
                 }
@@ -2674,6 +3063,10 @@
                     cargarPanelGrupos(asignatura);
                 }
 
+                // ==========================================
+                // 11. GESTIÓN DE MI HORARIO Y TABLA
+                // ==========================================
+
                 function toggleSeleccionManual(id, asignatura) {
                     registrarEstado();
                     if (materiasPendientes.some(p => p.curso.id_unico === id)) {
@@ -2695,9 +3088,30 @@
                     cargarPanelGrupos(asignatura);
                 }
 
-                function ordenarMiHorario() {
-                    let criterio = document.getElementById('sort-manual').value;
+                function ordenarMiHorario(criterioInput = null) {
+                    let criterio = criterioInput;
+                    if (!criterio) {
+                        let el = document.getElementById('sort-manual');
+                        if (el) criterio = el.value;
+                    }
                     if (!criterio) return;
+
+                    // Actualizar UI del selector si existe (para sincronizar)
+                    let elSelect = document.getElementById('sort-manual');
+                    if (elSelect && criterioInput) elSelect.value = criterioInput;
+
+                    // Actualizar texto del botón si existe
+                    let btnLabel = document.getElementById('btn-sort-label');
+                    if (btnLabel) {
+                        const labels = {
+                            'materia': 'Materia',
+                            'profesor': 'Profesor',
+                            'grupo': 'Grupo',
+                            'horas': 'Duración',
+                            'cronologico': 'Cronológico'
+                        };
+                        btnLabel.innerText = labels[criterio] || 'Ordenar';
+                    }
                     const mapaDias = { 'LUNES': 0, 'MARTES': 1, 'MIERCOLES': 2, 'JUEVES': 3, 'VIERNES': 4, 'SABADO': 5 };
                     miHorario.sort((a, b) => {
                         switch (criterio) {
@@ -2725,6 +3139,7 @@
                     });
                     guardarEstado();
                     actualizarTablaHorario();
+                    renderizarHorarioVisual();
                 }
 
                 function actualizarTablaHorario() {
@@ -2779,7 +3194,7 @@
                         let rndId = 'obs-auto-' + Math.random().toString(36).substr(2, 6);
                         obsCell = `<button class="btn-ver-obs" onclick="verObs('${rndId}')">Ver Obs</button><div id="${rndId}" class="obs-box text-start mt-1" style="display:none; min-width: 150px;">${c.observaciones}</div>`;
                     }
-                    return `<tr><td class="text-start small fw-bold text-primary text-truncate" style="max-width:150px;" title="${c.asignatura}">${c.asignatura}</td><td>${c.grupo}</td><td class="text-start small text-uppercase text-truncate" style="max-width:150px;" title="${c.profesor}">${c.profesor}</td><td>${d.LUNES}</td><td>${d.MARTES}</td><td>${d.MIERCOLES}</td><td>${d.JUEVES}</td><td>${d.VIERNES}</td><td>${d.SABADO}</td><td>${c.creditos}</td><td>${obsCell}</td><td>${btn}</td></tr>`;
+                    return `<tr><td class="text-start small fw-bold text-primary text-truncate" style="max-width:150px;" title="${c.asignatura}">${c.asignatura} <span class="text-muted fw-normal">(${c.clave})</span></td><td>${c.grupo}</td><td class="text-start small text-uppercase text-truncate" style="max-width:150px;" title="${c.profesor}">${c.profesor}</td><td>${d.LUNES}</td><td>${d.MARTES}</td><td>${d.MIERCOLES}</td><td>${d.JUEVES}</td><td>${d.VIERNES}</td><td>${d.SABADO}</td><td>${c.creditos}</td><td>${obsCell}</td><td>${btn}</td></tr>`;
                 }
 
                 function borrar(idx) {
@@ -2802,6 +3217,11 @@
                         actualizarTablaHorario();
                     }
                 }
+
+                // --- NUEVAS FUNCIONES DE DESCARGA (CORRIGEN MÓVIL/VERTICAL) ---
+                // ==========================================
+                // 12. FUNCIONES DE EXPORTACIÓN
+                // ==========================================
 
                 // --- NUEVAS FUNCIONES DE DESCARGA (CORRIGEN MÓVIL/VERTICAL) ---
                 async function descargarPDF() {
@@ -2888,14 +3308,14 @@
                 function descargarCSV() {
                     if (miHorario.length === 0) return alert("No hay horario para exportar.");
                     let csvContent = "data:text/csv;charset=utf-8,";
-                    csvContent += "Materia,Grupo,Profesor,Lunes,Martes,Miercoles,Jueves,Viernes,Sabado,Creditos,Observaciones\n";
+                    csvContent += "Materia,Clave,Grupo,Profesor,Lunes,Martes,Miercoles,Jueves,Viernes,Sabado,Creditos,Observaciones\n";
                     miHorario.forEach(c => {
                         let d = { LUNES: '', MARTES: '', MIERCOLES: '', JUEVES: '', VIERNES: '', SABADO: '' };
                         c.sesiones.forEach(s => { let k = s.dia.toUpperCase().replace('É', 'E'); if (d.hasOwnProperty(k)) d[k] = `${s.inicio}-${s.fin}`; });
                         let asig = c.asignatura.replace(/,/g, '');
                         let prof = c.profesor.replace(/,/g, '');
                         let obs = (c.observaciones || "").replace(/,/g, ' ').replace(/\n/g, ' ');
-                        let row = `${asig},${c.grupo},${prof},${d.LUNES},${d.MARTES},${d.MIERCOLES},${d.JUEVES},${d.VIERNES},${d.SABADO},${c.creditos},${obs}`;
+                        let row = `${asig},${c.clave},${c.grupo},${prof},${d.LUNES},${d.MARTES},${d.MIERCOLES},${d.JUEVES},${d.VIERNES},${d.SABADO},${c.creditos},${obs}`;
                         csvContent += row + "\n";
                     });
                     const encodedUri = encodeURI(csvContent);
@@ -2932,7 +3352,7 @@
                     let merges = [];
 
                     miHorario.forEach(curso => {
-                        let textoCelda = `${curso.asignatura}\n(${curso.profesor})\nGpo: ${curso.grupo}`;
+                        let textoCelda = `${curso.asignatura} (${curso.clave})\n(${curso.profesor})\nGpo: ${curso.grupo}`;
                         curso.sesiones.forEach(sesion => {
                             let diaNormal = sesion.dia.toUpperCase().replace("É", "E");
                             let colIndex = diasKeys.indexOf(diaNormal) + 1;
@@ -2964,6 +3384,10 @@
                     XLSX.utils.book_append_sheet(wb, ws, "Horario Visual");
                     XLSX.writeFile(wb, "Horario_FacPsi_UNAM.xlsx");
                 }
+
+                // ==========================================
+                // 13. MODO EXPLORADOR: SELECCIÓN Y GENERACIÓN
+                // ==========================================
 
                 function filtrarMateriasAuto() {
                     let txt = document.getElementById('buscador-auto').value.toUpperCase();
@@ -3030,6 +3454,7 @@
                         <span class="badge bg-secondary">Gpo ${c.grupo}</span>
                         <span class="text-muted small">${c.creditos} Cr</span>
                     </div>
+                    <div class="mb-1 text-center"><span class="badge bg-light text-dark border">Clave: ${c.clave}</span></div>
                     <h6 class="card-title text-primary small text-uppercase fw-bold mb-2" style="min-height:2.5em;">${c.profesor}</h6>
                     <div class="small text-muted flex-grow-1 border-top pt-2">${horario}</div> 
                     ${obsBtn} ${obsBox} ${textoEstado}
@@ -3074,6 +3499,10 @@
                     if (teoria && practica) { if (!teoria.observaciones.includes(practica.grupo)) return false; }
                     return true;
                 }
+
+                // ==========================================
+                // 14. ALGORITMOS DE GENERACIÓN
+                // ==========================================
 
                 async function generarCombinaciones() {
                     let resDiv = document.getElementById('resultados-auto');
@@ -3175,6 +3604,7 @@
                         }
 
                         if (RESULTADOS_GLOBALES.length > 0) {
+                            renderizarFiltroProfesores();
                             actualizarFiltrosUI();
                             document.getElementById('panel-filtros-resultados').style.display = 'block';
                             aplicarOrdenYFiltro();
@@ -3189,43 +3619,179 @@
 
                 function ejecutarDetectiveDeConflictos(nombresMaterias, contenedor) {
                     document.getElementById('panel-filtros-resultados').style.display = 'none';
+                    let resDiv = document.getElementById('resultados-auto');
 
-                    let reporteHTML = `<div class="alert alert-danger shadow-sm"><h5 class="alert-heading fw-bold"><i class="bi bi-lightning-fill"></i> No existen horarios posibles</h5><p class="small mb-2">Ninguna combinación encaja.</p><hr><h6 class="fw-bold small text-uppercase">Diagnóstico:</h6><ul class="mb-0 small ps-3">`;
+                    resDiv.innerHTML = `
+                        <div class="card border-0 shadow-sm mx-auto mt-4" style="max-width: 600px;">
+                            <div class="card-body text-center p-5">
+                                <div class="mb-4">
+                                    <i class="bi bi-puzzle display-1 text-muted opacity-50"></i>
+                                </div>
+                                <h4 class="fw-bold text-dark mb-3">No existen horarios posibles</h4>
+                                <p class="text-muted mb-4">
+                                    El sistema ha explorado todas las opciones pero no encontró combinaciones válidas. 
+                                    Esto suele ocurrir cuando hay <strong>traslapes inevitables</strong> entre materias obligatorias 
+                                    o cuando se exceden los límites de tiempo.
+                                </p>
+                                <div class="alert alert-light border small text-muted mb-4">
+                                    <i class="bi bi-info-circle me-2"></i> No es un error del estudiante ni una falla del sistema. Es un rompecabezas complejo que requiere ajustes.
+                                </div>
+                                <button class="btn btn-primary rounded-pill px-4 py-2 shadow-sm" onclick="iniciarAnalisisProfundo()">
+                                    <i class="bi bi-search me-2"></i> Identificar materia en conflicto
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }
 
-                    let conflictosEncontrados = 0;
+                async function iniciarAnalisisProfundo() {
+                    let resDiv = document.getElementById('resultados-auto');
+                    resDiv.innerHTML = `
+                        <div class="text-center py-5">
+                            <div class="spinner-border text-primary mb-3" role="status"></div>
+                            <h5 class="fw-bold">Analizando conflictos...</h5>
+                            <p class="text-muted small">Simulando escenarios alternativos...</p>
+                        </div>
+                    `;
 
-                    for (let i = 0; i < nombresMaterias.length; i++) {
-                        for (let j = i + 1; j < nombresMaterias.length; j++) {
-                            let matA = nombresMaterias[i];
-                            let matB = nombresMaterias[j];
-                            let gruposA = bolsa[matA];
-                            let gruposB = bolsa[matB];
-                            let sonCompatibles = false;
+                    await new Promise(r => setTimeout(r, 800)); // UX delay
 
-                            checkLoop:
-                            for (let gA of gruposA) {
-                                for (let gB of gruposB) {
-                                    if (!hayChoque(gA, [gB])) {
-                                        sonCompatibles = true;
-                                        break checkLoop;
-                                    }
-                                }
+                    let reportes = [];
+                    let nombres = Object.keys(bolsa);
+
+                    for (let materiaIgnorada of nombres) {
+                        // Crear bolsa temporal sin esta materia
+                        let listasTemp = [];
+                        for (let m of nombres) {
+                            if (m !== materiaIgnorada) {
+                                listasTemp.push(bolsa[m]);
                             }
+                        }
 
-                            if (!sonCompatibles) {
-                                conflictosEncontrados++;
-                                reporteHTML += `<li><strong>${matA}</strong> choca con <strong>${matB}</strong> en todas las opciones.</li>`;
-                            }
+                        let sim = simularGeneracion(listasTemp);
+                        if (sim.validas > 0) {
+                            reportes.push({
+                                ignorada: materiaIgnorada,
+                                validas: sim.validas,
+                                creditos: sim.avgCreditos,
+                                maxCreditos: sim.maxCreditos
+                            });
                         }
                     }
 
-                    if (conflictosEncontrados === 0) {
-                        reporteHTML += `<li>El conflicto es complejo (3 o más materias chocan entre sí).</li><li>Prueba reduciendo materias.</li>`;
+                    // Ordenar por quién desbloquea más opciones
+                    reportes.sort((a, b) => b.validas - a.validas);
+
+                    // Renderizar Reporte
+                    let html = `<div class="container py-4" style="max-width:800px;">
+                        <div class="d-flex align-items-center mb-4">
+                            <button class="btn btn-sm btn-outline-secondary me-3" onclick="generarCombinaciones()"><i class="bi bi-arrow-clockwise"></i> Reintentar</button>
+                            <h4 class="fw-bold mb-0">Reporte de Conflictos</h4>
+                        </div>`;
+
+                    if (reportes.length === 0) {
+                        html += `<div class="alert alert-warning text-center shadow-sm">
+                            <h5 class="fw-bold"><i class="bi bi-exclamation-triangle"></i> Conflicto Complejo</h5>
+                            <p>Incluso quitando una materia a la vez, no se encontraron soluciones válidas.</p>
+                            <p class="small text-muted mb-0">Esto indica que hay múltiples choques simultáneos. Prueba reduciendo tu carga académica eliminando 2 o más materias manualmente.</p>
+                        </div>`;
                     } else {
-                        reporteHTML += `<li class="mt-2 text-muted list-unstyled"><i>Sugerencia: Elimina una de las materias conflictivas.</i></li>`;
+                        html += `<p class="alert alert-info border-0 shadow-sm mb-4"><i class="bi bi-lightbulb-fill me-2"></i>Se detectó que las siguientes materias están bloqueando tu horario. Te sugerimos empezar evaluando la primera opción.</p>`;
+
+                        reportes.forEach((rep, idx) => {
+                            let isBest = idx === 0;
+                            let badgeCreditos = rep.maxCreditos > 41 ?
+                                `<span class="badge bg-warning text-dark border border-warning ms-2"><i class="bi bi-exclamation-circle"></i> Excede Créditos (${rep.maxCreditos})</span>` :
+                                (rep.maxCreditos < 30 ? `<span class="badge bg-light text-muted border ms-2">Baja Carga (${rep.maxCreditos} Cr)</span>` : '');
+
+                            html += `
+                            <div class="card mb-3 ${isBest ? 'border-primary shadow-sm' : 'border-light shadow-sm'}">
+                                <div class="card-body d-flex justify-content-between align-items-center flex-wrap">
+                                    <div>
+                                        ${isBest ? '<div class="text-uppercase text-primary fw-bold mb-1" style="font-size:0.7rem; letter-spacing:1px;">Mejor Solución</div>' : ''}
+                                        <h5 class="fw-bold mb-1">Si eliminas: <span class="text-danger">${rep.ignorada}</span></h5>
+                                        <p class="mb-0 text-muted small">Se desbloquean <strong>${rep.validas}${rep.validas >= 100 ? '+' : ''} combinaciones</strong> posibles.</p>
+                                    </div>
+                                    <div class="text-end mt-2 mt-sm-0">
+                                        ${badgeCreditos}
+                                    </div>
+                                </div>
+                            </div>`;
+                        });
                     }
-                    reporteHTML += `</ul></div>`;
-                    contenedor.innerHTML = reporteHTML;
+                    html += `</div>`;
+                    resDiv.innerHTML = html;
+                }
+
+                function simularGeneracion(listas) {
+                    let indices = new Array(listas.length).fill(0);
+                    let validas = 0;
+                    let sumaCreditos = 0;
+                    let maxCreditos = 0;
+                    let count = 0;
+
+                    while (true) {
+                        let comb = [];
+                        for (let i = 0; i < listas.length; i++) comb.push(listas[i][indices[i]]);
+
+                        if (!hayChoqueCombo(comb) && esCombinacionValida(comb)) {
+                            validas++;
+                            let c = comb.reduce((a, b) => a + b.creditos, 0);
+                            sumaCreditos += c;
+                            if (c > maxCreditos) maxCreditos = c;
+                        }
+
+                        count++;
+                        if (validas >= 100 || count >= 2000) break; // Limite para velocidad
+
+                        let next = listas.length - 1;
+                        while (next >= 0) {
+                            indices[next]++;
+                            if (indices[next] < listas[next].length) break;
+                            indices[next] = 0;
+                            next--;
+                        }
+                        if (next < 0) break;
+                    }
+
+                    return {
+                        validas,
+                        avgCreditos: validas ? Math.round(sumaCreditos / validas) : 0,
+                        maxCreditos
+                    };
+                }
+
+
+                // ==========================================
+                // 15. RENDERIZADO DE RESULTADOS Y UTILIDADES
+                // ==========================================
+
+                function renderizarFiltroProfesores() {
+                    let container = document.getElementById('lista-profes-filtro-resultados');
+                    if (!container) return;
+                    container.innerHTML = '';
+
+                    let todosLosProfes = new Set();
+                    RESULTADOS_GLOBALES.forEach(r => {
+                        r.cursos.forEach(c => todosLosProfes.add(c.profesor));
+                    });
+
+                    let listaOrdenada = Array.from(todosLosProfes).sort();
+
+                    if (listaOrdenada.length === 0) {
+                        container.innerHTML = '<div class="text-muted small text-center p-2">No hay profesores para filtrar.</div>';
+                        return;
+                    }
+
+                    listaOrdenada.forEach(profe => {
+                        let div = document.createElement('div'); div.className = 'form-check mb-1';
+                        // Generar ID seguro
+                        let safeId = 'chk-prof-' + profe.replace(/[^a-zA-Z0-9]/g, '');
+                        let safeVal = profe.replace(/"/g, '&quot;');
+                        div.innerHTML = `<input class="form-check-input chk-filtro-profe" type="checkbox" value="${safeVal}" id="${safeId}" onchange="aplicarOrdenYFiltro()">
+                                         <label class="form-check-label small text-truncate d-block" for="${safeId}" title="${profe}">${profe}</label>`;
+                        container.appendChild(div);
+                    });
                 }
 
                 function filtrarListaProfesResultados(input) {
@@ -3265,8 +3831,11 @@
 
                     let filtrados = RESULTADOS_GLOBALES.filter(r => {
                         if (profesSeleccionados.length > 0) {
-                            let tieneProfe = r.cursos.some(c => profesSeleccionados.includes(c.profesor));
-                            if (!tieneProfe) return false;
+                            // LOGICA STRICT AND: El horario debe tener TODOS los profesores seleccionados
+                            let cumpleTodos = profesSeleccionados.every(profeSel =>
+                                r.cursos.some(c => c.profesor === profeSel)
+                            );
+                            if (!cumpleTodos) return false;
                         }
                         if (diasLibres.length > 0) {
                             let ocupaDiaLibre = r.cursos.some(c => c.sesiones.some(s => diasLibres.includes(s.dia)));
@@ -3289,14 +3858,26 @@
 
                 function dibujarResultados(lista) {
                     RESULTADOS_MOSTRADOS = lista;
-                    let resDiv = document.getElementById('resultados-auto'); resDiv.innerHTML = '';
+                    OFFSET_MOSTRADOS = 0;
+                    let resDiv = document.getElementById('resultados-auto');
+                    resDiv.innerHTML = '';
                     document.getElementById('conteo-resultados').innerText = `${lista.length} opciones`;
-
-                    document.getElementById('btn-recolor-auto').style.display = lista.length > 0 ? 'inline-block' : 'none';
 
                     if (!lista.length) { resDiv.innerHTML = '<div class="alert alert-danger small text-center">No hay combinaciones con esos filtros.</div>'; return; }
 
-                    lista.slice(0, 50).forEach((val, i) => {
+                    renderizarBatchResultados();
+                }
+
+                function renderizarBatchResultados() {
+                    let resDiv = document.getElementById('resultados-auto');
+                    let btnLoad = document.getElementById('btn-cargar-mas');
+                    if (btnLoad) btnLoad.remove();
+
+                    let end = Math.min(OFFSET_MOSTRADOS + BATCH_SIZE, RESULTADOS_MOSTRADOS.length);
+                    let batch = RESULTADOS_MOSTRADOS.slice(OFFSET_MOSTRADOS, end);
+
+                    batch.forEach((val, k) => {
+                        let i = OFFSET_MOSTRADOS + k;
                         let idAcc = `acc-${i}`;
                         let rows = val.cursos.map(c => generarFilaSIAE(c, null, false)).join('');
                         let item = document.createElement('div'); item.className = 'accordion-item border shadow-sm mb-2';
@@ -3321,6 +3902,11 @@
                     <button class="btn btn-sm btn-outline-success me-2" onclick="transferirAManual(${i})" title="Usar este horario en Modo Manual">
                         <i class="bi bi-pencil-square"></i> Transferir
                     </button>
+                    
+                    <button class="btn btn-sm btn-outline-secondary me-2" id="btn-recolor-auto-${i}" style="display:none;" onclick="recolorearAuto(); event.stopPropagation();" title="Cambiar paleta de colores">
+                        <i class="bi bi-palette"></i>
+                    </button>
+
                     <div class="form-check form-switch ms-2 me-1" onclick="event.stopPropagation()" style="transform: scale(0.85); transform-origin: right center;">
                         <input class="form-check-input" type="checkbox" id="switch-auto-${i}" onchange="toggleVistaAuto(${i})">
                         <label class="form-check-label fw-bold text-muted" for="switch-auto-${i}" style="font-size: 0.8rem;">Gráfico</label>
@@ -3336,6 +3922,18 @@
                 </div>`;
                         resDiv.appendChild(item);
                     });
+
+                    OFFSET_MOSTRADOS = end;
+
+                    if (OFFSET_MOSTRADOS < RESULTADOS_MOSTRADOS.length) {
+                        let divBtn = document.createElement('div');
+                        divBtn.id = 'btn-cargar-mas';
+                        divBtn.className = 'text-center py-4';
+                        divBtn.innerHTML = `<button class="btn btn-outline-primary rounded-pill px-4 shadow-sm" onclick="renderizarBatchResultados()">
+                                                <i class="bi bi-plus-circle me-2"></i>Cargar más resultados (${RESULTADOS_MOSTRADOS.length - OFFSET_MOSTRADOS} restantes)
+                                            </button>`;
+                        resDiv.appendChild(divBtn);
+                    }
                 }
 
                 function transferirAManual(idx) {
@@ -3397,9 +3995,13 @@
                     let tabla = document.getElementById(`res-tabla-${idx}`);
                     let visual = document.getElementById(`res-visual-${idx}`);
                     let selectorSort = document.getElementById(`sort-auto-${idx}`);
+                    let recolorBtn = document.getElementById(`btn-recolor-auto-${idx}`);
 
                     if (selectorSort) {
                         selectorSort.style.display = isChecked ? 'none' : 'inline-block';
+                    }
+                    if (recolorBtn) {
+                        recolorBtn.style.display = isChecked ? 'inline-block' : 'none';
                     }
 
                     tabla.style.display = isChecked ? 'none' : 'block';
@@ -3458,7 +4060,7 @@
                                 bloque.style.height = `${heightPx}px`;
 
                                 let htmlContent = `<div class="materia-nombre">${curso.asignatura}</div>`;
-                                htmlContent += `<div class="materia-grupo">Gpo: ${curso.grupo}</div>`;
+                                htmlContent += `<div class="materia-grupo">Gpo: ${curso.grupo} <span style="font-weight:normal; opacity:0.8;">| Clave: ${curso.clave}</span></div>`;
                                 htmlContent += `<div class="materia-profe">${curso.profesor}</div>`;
                                 htmlContent += `<div class="materia-horas">${horasStr}</div>`;
 
@@ -3476,6 +4078,10 @@
                         });
                     });
                 }
+
+                // ==========================================
+                // 16. INIT Y CONTROL DE FLUJO GLOBAL
+                // ==========================================
 
                 window.entrarAlWorkspace = function () {
                     let selectorInicio = document.getElementById('landing-selector');
@@ -3507,6 +4113,7 @@
                         landing.style.display = 'none';
                     }, 600);
                 };
+
                 function actualizarFiltrosUI() {
                     if (document.getElementById('sort-resultados'))
                         document.getElementById('sort-resultados').value = 'dias';
@@ -3562,8 +4169,8 @@
 
                             ctx.beginPath();
                             ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                            // Custom Yellow Color: Tailwind Yellow-300 equivalent
-                            ctx.fillStyle = 'rgba(253, 224, 71, ' + p.opacity + ')';
+                            // Custom White Color
+                            ctx.fillStyle = 'rgba(255, 255, 255, ' + p.opacity + ')';
                             ctx.fill();
                         });
                         requestAnimationFrame(animate);
@@ -3582,3 +4189,4 @@
 </body>
 
 </html>
+
